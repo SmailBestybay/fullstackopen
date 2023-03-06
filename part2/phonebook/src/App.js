@@ -1,16 +1,17 @@
 import { useState } from 'react'
 
-const Number = ({person}) => <div>{person.name} {person.number}</div>
+const Number = ({ person }) => <div>{person.name} {person.number}</div>
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { 
-      name: 'Arto Hellas',
-      number: '123-456' ,
-    }
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [searchPerson, setSearchPerson] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -24,22 +25,36 @@ const App = () => {
     }
   }
 
+  const filteredPersons = (searchPerson === '')
+    ? persons
+    : persons.filter(person => person.name
+      .toLowerCase()
+      .includes(searchPerson.toLowerCase()))
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        filter shown with:
+        <input
+          value={searchPerson}
+          onChange={(event) => { setSearchPerson(event.target.value) }}
+        />
+      </div>
+      <h2>add a new</h2>
       <form onSubmit={handleSubmit}>
         <div>
           name:
           <input
-            value={newName} 
-            onChange={(event) => {setNewName(event.target.value)}} 
+            value={newName}
+            onChange={(event) => { setNewName(event.target.value) }}
           />
         </div>
         <div>
           number:
           <input
-            value={newNumber} 
-            onChange={(event) => {setNewNumber(event.target.value)}}
+            value={newNumber}
+            onChange={(event) => { setNewNumber(event.target.value) }}
           />
         </div>
         <div>
@@ -48,7 +63,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <div>
-        {persons.map(person =>
+        {filteredPersons.map(person =>
           <Number person={person} key={person.name} />
         )}
       </div>
