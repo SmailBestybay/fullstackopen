@@ -14,7 +14,7 @@ const App = () => {
     personServices
       .getAll()
       .then(initialPersons => setPersons(initialPersons))
-  },[])
+  }, [])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -26,9 +26,25 @@ const App = () => {
       personServices
         .create(newPerson)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
-      
+
       setNewName('')
       setNewNumber('')
+    }
+  }
+
+  const handleDeleteOf = (id) => {
+    const person = persons.find(p => p.id === id)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      console.log('deleting');
+      personServices
+        .deletePerson(person.id)
+        .then(response => {
+          if(response.statusText === 'OK') {
+            setPersons(persons.filter(p => p.id !== person.id))
+          }
+        })
+    } else {
+      console.log('not deleting');
     }
   }
 
@@ -41,17 +57,18 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter searchPerson={searchPerson} setSearchPerson={setSearchPerson}/>
+      <Filter searchPerson={searchPerson} setSearchPerson={setSearchPerson} />
       <h2>add a new</h2>
-      <PersonForm 
-        handleSubmit={handleSubmit} 
+      <PersonForm
+        handleSubmit={handleSubmit}
         newName={newName}
         setNewName={setNewName}
         newNumber={newNumber}
         setNewNumber={setNewNumber}
       />
       <h2>Numbers</h2>
-      <Persons persons={filteredPersons} />
+      {/* passing the handler as a prop */}
+      <Persons persons={filteredPersons} handleDeleteOf={handleDeleteOf} />
     </div>
   )
 }
