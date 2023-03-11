@@ -18,24 +18,43 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    const foundName = persons.find(person => newName === person.name)
-    if (foundName) {
-      alert(`${newName} is already added to phonebook`)
+    const foundPerson = persons.find(person => newName === person.name)
+    if (foundPerson) {
+      const confirmed = window.confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+
+      if(confirmed) {
+        const newPerson = {...foundPerson, number: newNumber}
+        personServices
+          .update(newPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person => 
+              person.id !== returnedPerson.id 
+              ? person 
+              : returnedPerson
+            ))
+          })
+          .catch(error => {
+            alert(`Unable to update ${newPerson.name}'s number`)
+          })
+      }
+
     } else {
       const newPerson = { name: newName, number: newNumber }
       personServices
         .create(newPerson)
         .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
-
-      setNewName('')
-      setNewNumber('')
+        .catch(error => alert(`Something went wrond. ${newPerson.name} was not added.`))
     }
+
+    setNewName('')
+    setNewNumber('')
   }
 
   const handleDeleteOf = (id) => {
     const person = persons.find(p => p.id === id)
     if (window.confirm(`Delete ${person.name}?`)) {
-      console.log('deleting');
       personServices
         .deletePerson(person.id)
         .then(response => {
@@ -43,8 +62,6 @@ const App = () => {
             setPersons(persons.filter(p => p.id !== person.id))
           }
         })
-    } else {
-      console.log('not deleting');
     }
   }
 
