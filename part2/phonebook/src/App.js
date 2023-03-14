@@ -10,7 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchPerson, setSearchPerson] = useState('')
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [messageStatus, setMessageStatus] = useState(null)
 
   useEffect(() => {
     personServices
@@ -47,9 +48,10 @@ const App = () => {
       personServices
         .create(newPerson)
         .then(returnedPerson => {
-          setSuccessMessage(`Added ${newPerson.name}`)
+          setNotificationMessage(`Added ${newPerson.name}`)
           setPersons(persons.concat(returnedPerson))
-          setTimeout(() => setSuccessMessage(null),2000)
+          setMessageStatus('success')
+          setTimeout(() => setNotificationMessage(null),2000)
         })
         .catch(error => alert(`Something went wrond. ${newPerson.name} was not added.`))
     }
@@ -68,6 +70,12 @@ const App = () => {
             setPersons(persons.filter(p => p.id !== person.id))
           }
         })
+        .catch(error =>{
+          setNotificationMessage(
+            `Information of ${person.name} has already been removed from server`
+          )
+          setMessageStatus('error')
+        })
     }
   }
 
@@ -80,7 +88,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage}/>
+      <Notification message={notificationMessage} status={messageStatus}/>
       <Filter searchPerson={searchPerson} setSearchPerson={setSearchPerson} />
       <h2>add a new</h2>
       <PersonForm
