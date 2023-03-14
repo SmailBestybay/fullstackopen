@@ -2,13 +2,15 @@ import { useEffect, useState } from 'react'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import Notification from './components/Notification'
 import personServices from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
-  const [searchPerson, setSearchPerson] = useState('enter name')
+  const [searchPerson, setSearchPerson] = useState('')
+  const [successMessage, setSuccessMessage] = useState(null)
 
   useEffect(() => {
     personServices
@@ -44,7 +46,11 @@ const App = () => {
       const newPerson = { name: newName, number: newNumber }
       personServices
         .create(newPerson)
-        .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
+        .then(returnedPerson => {
+          setSuccessMessage(`Added ${newPerson.name}`)
+          setPersons(persons.concat(returnedPerson))
+          setTimeout(() => setSuccessMessage(null),2000)
+        })
         .catch(error => alert(`Something went wrond. ${newPerson.name} was not added.`))
     }
 
@@ -74,6 +80,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage}/>
       <Filter searchPerson={searchPerson} setSearchPerson={setSearchPerson} />
       <h2>add a new</h2>
       <PersonForm
