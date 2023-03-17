@@ -32,32 +32,27 @@ function App() {
     return null
   }
 
-  if (countriesToShow.length > 10) {
-    return (
-      <>
-        <Search searchCountry={searchCountry} searchHandler={searchHandler} />
-        <div>Too many matches, specify another filter</div>
-      </>
-    )
-  }
-
-  if (countriesToShow.length === 1) {
-    const country = countriesToShow[0]
-    return (
-      <>
-        <Search searchCountry={searchCountry} searchHandler={searchHandler} />
-        <Country country={country}/>
-      </>
-    )
-  }
-
   return (
     <>
       <Search searchCountry={searchCountry} searchHandler={searchHandler} />
-      <Countries 
-        countriesToShow={countriesToShow} 
-        setCountriesToShow={setCountriesToShow} 
-      />
+      {
+        countriesToShow.length > 10 
+          ? (<div>Too many matches, specify another filter</div>) 
+          : null
+      }
+      {
+        countriesToShow.length === 1
+          ? (<Country country={countriesToShow[0]}/>)
+          : null
+      }
+      {
+        countriesToShow.length <= 10
+          ? (<Countries 
+              countriesToShow={countriesToShow} 
+              setCountriesToShow={setCountriesToShow} 
+            />)
+          : null
+      }
     </>
   )
 }
