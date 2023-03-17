@@ -9,6 +9,7 @@ function App() {
   const [searchCountry, setSearchCountry] = useState('')
   const [allCountries, setAllCountries] = useState(null)
   const [countriesToShow, setCountriesToShow] = useState([])
+  const api_key = process.env.REACT_APP_API_KEY
 
   useEffect(() => {
     axios
@@ -18,6 +19,15 @@ function App() {
         setAllCountries(fallbackData)
       })
   }, [])
+  const latlng = [
+    -20.0,
+    30.0
+]
+  useEffect(()=> {
+    axios
+      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${latlng[0]}&lon=${latlng[1]}&appid=${api_key}`)
+      .then(response => console.log(response.data))
+  },[])
 
   const searchHandler = (country) => {
     setSearchCountry(country)
