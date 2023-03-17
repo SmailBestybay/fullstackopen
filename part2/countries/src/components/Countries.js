@@ -1,22 +1,14 @@
-import Country from './Country'
-
-const Countries = ({ foundCountries }) => {
-
-  if (foundCountries.length > 10) {
-    return <div>Too many matches, specify another filter</div>
-  }
-
-  if (foundCountries.length === 1) {
-    const country = foundCountries[0]
-    return (
-      <Country country={country}/>
-    )
-  }
-
+const Countries = ({ countriesToShow, setCountriesToShow }) => {
+  if (countriesToShow === 1) return null
   return (
     <>
-      {foundCountries.map((country, i) => {
-        return <div key={i}>{country.name.common}</div>
+      {countriesToShow.map((country, i) => {
+        return (
+          <div key={i}>
+            {country.name.common}
+            <button onClick={() => setCountriesToShow([country])}>show</button>
+          </div>
+          )
       })}
     </>
   )
