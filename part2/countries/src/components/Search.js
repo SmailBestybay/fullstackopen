@@ -1,10 +1,10 @@
-const Search = ({ searchCountry, changeHandler }) => {
+const Search = ({ searchCountry, searchHandler }) => {
     return (
       <div>
         find countries
         <input
           value={searchCountry}
-          onChange={(event) => { changeHandler(event.target.value) }}
+          onChange={(event) => { searchHandler(event.target.value) }}
         />
       </div>
     )

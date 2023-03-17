@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import axios from 'axios'
-import data from './components/data/data.json'
+import fallbackData from './components/data/fallbackData.json'
 import Search from './components/Search'
 import Countries from './components/Countries'
 
@@ -13,12 +13,12 @@ function App() {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then((response) => setAllCountries(response.data))
-      .catch(error => {
-        setAllCountries(data)
+      .catch(() => {
+        setAllCountries(fallbackData)
       })
   }, [])
 
-  const changeHandler = (country) => {
+  const searchHandler = (country) => {
     setSearchCountry(country)
     const nextCountries = allCountries
       .filter((country) => country.name.common
@@ -33,7 +33,7 @@ function App() {
 
   return (
     <>
-      <Search searchCountry={searchCountry} changeHandler={changeHandler} />
+      <Search searchCountry={searchCountry} searchHandler={searchHandler} />
       <Countries foundCountries={foundCountries} />
     </>
   )

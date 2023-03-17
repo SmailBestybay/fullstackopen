@@ -1,3 +1,5 @@
+import Country from './Country'
+
 const Countries = ({ foundCountries }) => {
 
   if (foundCountries.length > 10) {
@@ -7,29 +9,14 @@ const Countries = ({ foundCountries }) => {
   if (foundCountries.length === 1) {
     const country = foundCountries[0]
     return (
-      <div>
-        <h1>{country.name.common}</h1>
-        <p>capital {country.capital}</p>
-        <p>area {country.area}</p>
-        <h2>languages:</h2>
-        <ul>
-          {Object.values(country.languages).map(language => {
-            return (
-              <li key={language}>{language}</li>
-            )
-          })}
-        </ul>
-        <img src={country.flags.png} alt={country.flags.alt} />
-      </div>
+      <Country country={country}/>
     )
   }
 
   return (
     <>
       {foundCountries.map((country, i) => {
-        return (
-          <div key={i}>{country.name.common}</div>
-        )
+        return <div key={i}>{country.name.common}</div>
       })}
     </>
   )
