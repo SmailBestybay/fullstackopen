@@ -1,4 +1,4 @@
-const Countries = ({ countriesToShow, setCountriesToShow }) => {
+const Countries = ({ countriesToShow, setCountriesToShow, setSingleCountry }) => {
   if (countriesToShow === 1) return null
   return (
     <>
@@ -6,7 +6,13 @@ const Countries = ({ countriesToShow, setCountriesToShow }) => {
         return (
           <div key={i}>
             {country.name.common}
-            <button onClick={() => setCountriesToShow([country])}>show</button>
+            <button onClick={() => {
+              setCountriesToShow([country])
+              setSingleCountry(country)
+              }}
+            >
+              show
+            </button>
           </div>
           )
       })}

@@ -9,6 +9,8 @@ function App() {
   const [searchCountry, setSearchCountry] = useState('')
   const [allCountries, setAllCountries] = useState(null)
   const [countriesToShow, setCountriesToShow] = useState([])
+  const [singleCountry, setSingleCountry] = useState(null)
+  const [weatherData, setWeatherData] = useState(null)
   const api_key = process.env.REACT_APP_API_KEY
 
   useEffect(() => {
@@ -19,23 +21,26 @@ function App() {
         setAllCountries(fallbackData)
       })
   }, [])
-  const latlng = [
-    -20.0,
-    30.0
-]
-  useEffect(()=> {
-    axios
-      .get(`https://api.openweathermap.org/data/2.5/weather?lat=${latlng[0]}&lon=${latlng[1]}&appid=${api_key}`)
-      .then(response => console.log(response.data))
-  },[])
 
-  const searchHandler = (country) => {
-    setSearchCountry(country)
+  useEffect(()=> {
+    if (singleCountry !== null) {
+      const baseUrl = 'https://api.openweathermap.org/data/2.5/weather?'
+      axios
+        .get(`${baseUrl}lat=${singleCountry.latlng[0]}&lon=${singleCountry.latlng[1]}&appid=${api_key}&units=metric`)
+        .then(response => setWeatherData(response.data))
+    }
+  },[singleCountry])
+
+  const searchHandler = (countries) => {
+    setSearchCountry(countries)
     const nextCountries = allCountries
-      .filter((country) => country.name.common
+      .filter(country => country.name.common
         .toLowerCase()
         .includes(searchCountry.toLowerCase()))
     setCountriesToShow(nextCountries);
+    if (nextCountries.length === 1) {
+      setSingleCountry(nextCountries[0])
+    }
   }
 
   if (allCountries === null) {
@@ -52,14 +57,15 @@ function App() {
       }
       {
         countriesToShow.length === 1
-          ? (<Country country={countriesToShow[0]}/>)
+          ? (<Country country={singleCountry} weatherData={weatherData}/>)
           : null
       }
       {
-        countriesToShow.length <= 10
+        (countriesToShow.length <= 10 && countriesToShow.length > 1)
           ? (<Countries 
               countriesToShow={countriesToShow} 
               setCountriesToShow={setCountriesToShow} 
+              setSingleCountry={setSingleCountry}
             />)
           : null
       }
