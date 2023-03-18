@@ -21,7 +21,8 @@ const Country = ({country, weatherData}) => {
                   <h2>Weather in {country.capital}</h2>
                   <p>temperature {weatherData.main.temp} Celicius</p>
                   <img 
-                    src={`https://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                    src={`https://openweathermap.org/img/wn/` + 
+                          `${weatherData.weather[0].icon}@2x.png`}
                     alt={weatherData.weather[0].description} />
                   <p>wind {weatherData.wind.speed} m/s</p>
                 </>

@@ -26,7 +26,9 @@ function App() {
     if (singleCountry !== null) {
       const baseUrl = 'https://api.openweathermap.org/data/2.5/weather?'
       axios
-        .get(`${baseUrl}lat=${singleCountry.latlng[0]}&lon=${singleCountry.latlng[1]}&appid=${api_key}&units=metric`)
+        .get(`${baseUrl}lat=${singleCountry.latlng[0]}&` + 
+              `lon=${singleCountry.latlng[1]}&` + 
+              `appid=${api_key}&units=metric`)
         .then(response => setWeatherData(response.data))
     }
   },[singleCountry])
