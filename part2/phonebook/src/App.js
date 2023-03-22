@@ -66,7 +66,7 @@ const App = () => {
       personServices
         .deletePerson(person.id)
         .then(response => {
-          if(response.statusText === 'OK') {
+          if(response.status === 204) {
             setPersons(persons.filter(p => p.id !== person.id))
           }
         })
