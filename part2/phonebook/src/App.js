@@ -39,7 +39,9 @@ const App = () => {
             ))
           })
           .catch(error => {
-            alert(`Unable to update ${newPerson.name}'s number`)
+            setNotificationMessage(`${error.response.data.error}`)
+            setMessageStatus('error')
+            setTimeout(() => setNotificationMessage(null), 2000)
           })
       }
 
@@ -53,7 +55,11 @@ const App = () => {
           setMessageStatus('success')
           setTimeout(() => setNotificationMessage(null),2000)
         })
-        .catch(error => alert(`Something went wrond. ${newPerson.name} was not added.`))
+        .catch(error => {
+          setNotificationMessage(`${error.response.data.error}`)
+          setMessageStatus('error')
+          setTimeout(() => setNotificationMessage(null), 2000)
+        })
     }
 
     setNewName('')
