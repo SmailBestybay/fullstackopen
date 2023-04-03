@@ -107,10 +107,28 @@ describe('author with most blogs', () => {
   })
 
   test('when list has only one blog, equals that author with blog one blog', () => {
-    expect(listHelper.mostBlogs(listWithOneBlog)).toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
+    expect(listHelper.mostBlogs(listWithOneBlog))
+      .toEqual({ author: 'Edsger W. Dijkstra', blogs: 1 })
   })
 
   test('when list has many blogs, equals author with most blogs, and blog count', () => {
-    expect(listHelper.mostBlogs(biggerListOfBlogs)).toEqual({ author: 'Robert C. Martin', blogs: 3 })
+    expect(listHelper.mostBlogs(biggerListOfBlogs))
+      .toEqual({ author: 'Robert C. Martin', blogs: 3 })
+  })
+})
+
+describe('author with most likes', () => {
+  test('when list is empty, equals empty object', () => {
+    expect(listHelper.mostLikes([])).toEqual({})
+  })
+
+  test('when list has only one blog, equals that author with likes from blog', () => {
+    expect(listHelper.mostLikes(listWithOneBlog))
+      .toEqual({ author: 'Edsger W. Dijkstra', likes: 5 })
+  })
+
+  test('when list has many blogs, equals author with most likes', () => {
+    expect(listHelper.mostLikes(biggerListOfBlogs))
+      .toEqual({ author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
