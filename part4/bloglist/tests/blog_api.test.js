@@ -19,10 +19,11 @@ const initialBlogs = [
   }
 ]
 
-const newBlogMissingLikes = {
+const newBlog = {
   title: 'Canonical string reduction',
   author: 'Edsger W. Dijkstra',
   url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  likes: 12,
 }
 
 beforeEach(async () => {
@@ -32,30 +33,30 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-describe('api get routes', () => {
-  test('blogs are returned as json', async () => {
+describe('api get routes tests', () => {
+  test('that blogs are returned as json', async () => {
     await api
       .get('/api/blogs')
       .expect(200)
       .expect('Content-Type', /application\/json/)
   }, 100000)
 
-  test('there are two blogs', async () => {
+  test('that there are two blogs', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body).toHaveLength(2)
   })
 
-  test('unique identifier property of the blog posts is named id', async () => {
+  test('that unique identifier property of the blog posts is named id', async () => {
     const response = await api.get('/api/blogs')
     expect(response.body[0].id).toBeDefined()
   })
 })
 
-describe('api post routes', () => {
+describe('api post routes tests', () => {
   test('/api/blogs succesfully creates a new blog', async () => {
     await api
       .post('/api/blogs')
-      .send(newBlogMissingLikes)
+      .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -66,14 +67,37 @@ describe('api post routes', () => {
   })
 
   test('if the likes property is missing, defailt to the value 0', async () => {
+    const tempBlog = { ...newBlog }
+    delete tempBlog.likes
+
     await api
       .post('/api/blogs')
-      .send(newBlogMissingLikes)
+      .send(tempBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
     expect(response.body[2].likes).toBe(0)
+  })
+
+  test('if title property is missing', async () => {
+    const tempBlog = { ...newBlog }
+    delete tempBlog.title
+
+    await api
+      .post('/api/blogs')
+      .send(tempBlog)
+      .expect(400)
+  })
+
+  test('if url property is missing', async () => {
+    const tempBlog = { ...newBlog }
+    delete tempBlog.url
+
+    await api
+      .post('/api/blogs')
+      .send(tempBlog)
+      .expect(400)
   })
 })
 
