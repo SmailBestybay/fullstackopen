@@ -19,11 +19,10 @@ const initialBlogs = [
   }
 ]
 
-const newBlog = {
+const newBlogMissingLikes = {
   title: 'Canonical string reduction',
   author: 'Edsger W. Dijkstra',
   url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-  likes: 12,
 }
 
 beforeEach(async () => {
@@ -56,7 +55,7 @@ describe('api post routes', () => {
   test('/api/blogs succesfully creates a new blog', async () => {
     await api
       .post('/api/blogs')
-      .send(newBlog)
+      .send(newBlogMissingLikes)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
@@ -64,7 +63,17 @@ describe('api post routes', () => {
     const titles = response.body.map(r => r.title)
     expect(response.body).toHaveLength(initialBlogs.length + 1)
     expect(titles).toContain('Canonical string reduction')
+  })
 
+  test('if the likes property is missing, defailt to the value 0', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlogMissingLikes)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    expect(response.body[2].likes).toBe(0)
   })
 })
 
