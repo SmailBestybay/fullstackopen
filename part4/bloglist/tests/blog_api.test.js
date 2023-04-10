@@ -19,6 +19,13 @@ const initialBlogs = [
   }
 ]
 
+const newBlog = {
+  title: 'Canonical string reduction',
+  author: 'Edsger W. Dijkstra',
+  url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
+  likes: 12,
+}
+
 beforeEach(async () => {
   await Blog.deleteMany({})
   const blogObjects = initialBlogs.map(blog => new Blog(blog))
@@ -26,22 +33,39 @@ beforeEach(async () => {
   await Promise.all(promiseArray)
 })
 
-test('blogs are returned as json', async () => {
-  await api
-    .get('/api/blogs')
-    .expect(200)
-    .expect('Content-Type', /application\/json/)
-}, 100000)
+describe('api get routes', () => {
+  test('blogs are returned as json', async () => {
+    await api
+      .get('/api/blogs')
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+  }, 100000)
 
-test('there are two blogs', async () => {
-  const response = await api.get('/api/blogs')
-  expect(response.body).toHaveLength(2)
+  test('there are two blogs', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body).toHaveLength(2)
+  })
+
+  test('unique identifier property of the blog posts is named id', async () => {
+    const response = await api.get('/api/blogs')
+    expect(response.body[0].id).toBeDefined()
+  })
 })
 
-test('unique identifier property of the blog posts is named id', async () => {
-  const response = await api.get('/api/blogs')
-  console.log('response', response.body[0])
-  expect(response.body[0].id).toBeDefined()
+describe('api post routes', () => {
+  test('/api/blogs succesfully creates a new blog', async () => {
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const response = await api.get('/api/blogs')
+    const titles = response.body.map(r => r.title)
+    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(titles).toContain('Canonical string reduction')
+
+  })
 })
 
 afterAll(async () => {
