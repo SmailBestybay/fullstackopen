@@ -1,34 +1,13 @@
 const mongoose = require('mongoose')
+const helper = require('../utils/test_helper')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
-const initialBlogs = [
-  {
-    title: 'React patterns',
-    author: 'Michael Chan',
-    url: 'https://reactpatterns.com/',
-    likes: 7,
-  },
-  {
-    title: 'Go To Statement Considered Harmful',
-    author: 'Edsger W. Dijkstra',
-    url: 'http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html',
-    likes: 5,
-  }
-]
-
-const newBlog = {
-  title: 'Canonical string reduction',
-  author: 'Edsger W. Dijkstra',
-  url: 'http://www.cs.utexas.edu/~EWD/transcriptions/EWD08xx/EWD808.html',
-  likes: 12,
-}
-
 beforeEach(async () => {
   await Blog.deleteMany({})
-  const blogObjects = initialBlogs.map(blog => new Blog(blog))
+  const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
   const promiseArray = blogObjects.map(blog => blog.save())
   await Promise.all(promiseArray)
 })
@@ -52,22 +31,36 @@ describe('api get routes tests', () => {
   })
 })
 
+describe('get a specific blog', () => {
+  test('suceed with a valid id', async () => {
+    const blogsAtStart = await helper.blogsInDB()
+    const blogToView = blogsAtStart[0]
+
+    const resultBlog = await api
+      .get(`/api/blogs/${blogToView.id}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    expect(resultBlog.body).toEqual(blogToView)
+  })
+})
+
 describe('api post routes tests', () => {
   test('/api/blogs succesfully creates a new blog', async () => {
     await api
       .post('/api/blogs')
-      .send(newBlog)
+      .send(helper.newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const response = await api.get('/api/blogs')
     const titles = response.body.map(r => r.title)
-    expect(response.body).toHaveLength(initialBlogs.length + 1)
+    expect(response.body).toHaveLength(helper.initialBlogs.length + 1)
     expect(titles).toContain('Canonical string reduction')
   })
 
   test('if the likes property is missing, defailt to the value 0', async () => {
-    const tempBlog = { ...newBlog }
+    const tempBlog = { ...helper.newBlog }
     delete tempBlog.likes
 
     await api
@@ -81,7 +74,7 @@ describe('api post routes tests', () => {
   })
 
   test('if title property is missing', async () => {
-    const tempBlog = { ...newBlog }
+    const tempBlog = { ...helper.newBlog }
     delete tempBlog.title
 
     await api
@@ -91,7 +84,7 @@ describe('api post routes tests', () => {
   })
 
   test('if url property is missing', async () => {
-    const tempBlog = { ...newBlog }
+    const tempBlog = { ...helper.newBlog }
     delete tempBlog.url
 
     await api
