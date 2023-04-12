@@ -62,6 +62,22 @@ describe('deletetion of a blog', () => {
   })
 })
 
+describe('updating the information of an individual blog', () => {
+  test('updates the number of likes', async () => {
+    const blogsAtStart = await helper.blogsInDB()
+    const blogToUpdate = blogsAtStart[0]
+    blogToUpdate.likes = 10
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
+
+    const afterUpdate = await api.get(`/api/blogs/${blogToUpdate.id}`)
+    expect(afterUpdate.body.likes).toEqual(blogToUpdate.likes)
+  })
+})
+
 describe('api post routes tests', () => {
   test('/api/blogs succesfully creates a new blog', async () => {
     await api
