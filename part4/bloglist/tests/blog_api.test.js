@@ -45,6 +45,23 @@ describe('get a specific blog', () => {
   })
 })
 
+describe('deletetion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDB()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
+
+    const urls = blogsAtEnd.map(r => r.url)
+    expect(urls).not.toContain(blogToDelete.url)
+  })
+})
+
 describe('api post routes tests', () => {
   test('/api/blogs succesfully creates a new blog', async () => {
     await api
