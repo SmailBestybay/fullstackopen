@@ -54,7 +54,7 @@ describe('deletetion of a blog', () => {
       .delete(`/api/blogs/${blogToDelete.id}`)
       .expect(204)
 
-    const blogsAtEnd = await helper.blogsInDb()
+    const blogsAtEnd = await helper.blogsInDB()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length - 1)
 
     const urls = blogsAtEnd.map(r => r.url)
