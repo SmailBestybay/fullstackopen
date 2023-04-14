@@ -3,7 +3,8 @@ const express = require('express')
 require('express-async-errors')
 const app = express()
 const cors = require('cors')
-const blogRouter = require('./controllers/blogs')
+const usersRouter = require('./controllers/users')
+const blogsRouter = require('./controllers/blogs')
 const logger = require('./utils/logger')
 const mongoose = require('mongoose')
 
@@ -20,6 +21,7 @@ mongoose
 
 app.use(cors())
 app.use(express.json())
-app.use('/api/blogs', blogRouter)
+app.use('/api/blogs', blogsRouter)
+app.use('/api/users', usersRouter)
 
 module.exports = app
