@@ -22,3 +22,13 @@ content-type: application/json
     "likes": "5",
     "__v": "0"
 }
+
+###
+POST http://localhost:3003/api/users/ HTTP/1.1
+content-type: application/json
+
+{
+    "username": "SmileInDEV",
+    "name": "Sam Likeman",
+    "password": "supersecret"
+}
