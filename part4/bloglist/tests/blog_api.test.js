@@ -188,6 +188,48 @@ describe('when there is initially one user in db', () => {
     }
   )
 
+  test('creatioin fails when username param is not present', async () => {
+    const usersAtStart = await helper.usersInDB()
+
+    const newUser = {
+      username: '',
+      name: 'Smail Bestybay',
+      password: 'hushush',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('must include username')
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
+
+  test('creatioin fails when password param is not present', async () => {
+    const usersAtStart = await helper.usersInDB()
+
+    const newUser = {
+      username: 'smile',
+      name: 'Smail Bestybay',
+      password: '',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('must include password')
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
+
   test('creation fails when password is less than 3 characters long', async () => {
     const usersAtStart = await helper.usersInDB()
 
@@ -204,6 +246,27 @@ describe('when there is initially one user in db', () => {
       .expect('Content-Type', /application\/json/)
 
     expect(result.body.error).toContain('password must be at least 3 characters long')
+
+    const usersAtEnd = await helper.usersInDB()
+    expect(usersAtEnd).toEqual(usersAtStart)
+  })
+
+  test('creation fails when username is less than 3 characters long', async () => {
+    const usersAtStart = await helper.usersInDB()
+
+    const newUser = {
+      username: 'sm',
+      name: 'Smail Bestybay',
+      password: 'hushhush',
+    }
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    expect(result.body.error).toContain('username must be at least 3 characters long')
 
     const usersAtEnd = await helper.usersInDB()
     expect(usersAtEnd).toEqual(usersAtStart)

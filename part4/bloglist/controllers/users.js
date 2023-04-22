@@ -10,10 +10,24 @@ usersRouter.get('/', async (request, response) => {
 usersRouter.post('/', async (request, response) => {
   const { username, name, password } = request.body
 
+  if(!password) {
+    return response.status(400).send({ error: 'must include password' })
+  }
+
+  if(!username) {
+    return response.status(400).send({ error: 'must include username' })
+  }
+
   if(password.length < 3) {
-    const error = Error('password must be at least 3 characters long')
-    error.name = 'PasswordValidationError'
-    throw error
+    return response
+      .status(400)
+      .send({ error: 'password must be at least 3 characters long' })
+  }
+
+  if(username.length < 3) {
+    return response
+      .status(400)
+      .send({ error: 'username must be at least 3 characters long' })
   }
 
   const saltRounds = 10
