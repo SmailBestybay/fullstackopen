@@ -96,7 +96,7 @@ describe('when there is initially some notes saved', () => {
       expect(titles).toContain('Canonical string reduction')
     })
 
-    test('if the likes property is missing, defailt to the value 0', async () => {
+    test('if the likes property is missing, default to the value 0', async () => {
       const tempBlog = { ...helper.newBlog }
       delete tempBlog.likes
 
