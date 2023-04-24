@@ -32,3 +32,12 @@ content-type: application/json
     "name": "Sam Likeman",
     "password": "supersecret"
 }
+
+###
+post http://localhost:3003/api/login/
+Content-Type: application/json
+
+{
+    "username": "SmileInDEV",
+    "password": "supersecret"
+}
