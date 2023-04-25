@@ -7,9 +7,24 @@ const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 
+
 describe('when there is initially some notes saved', () => {
 
+  let authorization
   beforeEach(async () => {
+    await User.deleteMany({})
+
+    const passwordHash = await bcrypt.hash('sekret', 10)
+    const user = new User({ username: 'root', passwordHash })
+
+    await user.save()
+
+    // probably not a great idea to use route to get token
+    const result = await api
+      .post('/api/login')
+      .send({ username: user.username, password: 'sekret' })
+
+    authorization = `Bearer ${result.body.token}`
     await Blog.deleteMany({})
     const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
     const promiseArray = blogObjects.map(blog => blog.save())
@@ -86,6 +101,7 @@ describe('when there is initially some notes saved', () => {
     test('/api/blogs succesfully creates a new blog', async () => {
       await api
         .post('/api/blogs')
+        .set('authorization', authorization)
         .send(helper.newBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
@@ -102,6 +118,7 @@ describe('when there is initially some notes saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('authorization', authorization)
         .send(tempBlog)
         .expect(201)
         .expect('Content-Type', /application\/json/)
