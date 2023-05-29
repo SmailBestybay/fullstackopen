@@ -24,6 +24,11 @@ const newBlog = {
 }
 
 const blogsInDB = async () => {
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 })
+  return blogs.map(blog => blog.toJSON())
+}
+
+const blogsInDBWithoutPopulate = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
@@ -37,5 +42,6 @@ module.exports = {
   initialBlogs,
   newBlog,
   blogsInDB,
+  blogsInDBWithoutPopulate,
   usersInDB
 }

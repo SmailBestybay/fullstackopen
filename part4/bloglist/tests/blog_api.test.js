@@ -26,7 +26,11 @@ describe('when there is initially some notes saved', () => {
 
     authorization = `Bearer ${result.body.token}`
     await Blog.deleteMany({})
-    const blogObjects = helper.initialBlogs.map(blog => new Blog(blog))
+    const blogObjects = helper.initialBlogs.map(blog => new Blog({
+      ...blog,
+      user: user._id,
+    }))
+
     const promiseArray = blogObjects.map(blog => blog.save())
     await Promise.all(promiseArray)
   })
@@ -71,6 +75,7 @@ describe('when there is initially some notes saved', () => {
 
       await api
         .delete(`/api/blogs/${blogToDelete.id}`)
+        .set('authorization', authorization)
         .expect(204)
 
       const blogsAtEnd = await helper.blogsInDB()
@@ -83,7 +88,7 @@ describe('when there is initially some notes saved', () => {
 
   describe('updating the information of an individual blog', () => {
     test('updates the number of likes', async () => {
-      const blogsAtStart = await helper.blogsInDB()
+      const blogsAtStart = await helper.blogsInDBWithoutPopulate()
       const blogToUpdate = blogsAtStart[0]
       blogToUpdate.likes = 10
       await api
