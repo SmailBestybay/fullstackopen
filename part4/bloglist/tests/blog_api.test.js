@@ -6,6 +6,7 @@ const api = supertest(app)
 const Blog = require('../models/blog')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const jwt = require('jsonwebtoken')
 
 
 describe('when there is initially some notes saved', () => {
@@ -19,12 +20,18 @@ describe('when there is initially some notes saved', () => {
 
     await user.save()
 
-    // probably not a great idea to use route to get token
-    const result = await api
-      .post('/api/login')
-      .send({ username: user.username, password: 'sekret' })
+    const userForToken = {
+      username: user.username,
+      id: user._id,
+    }
 
-    authorization = `Bearer ${result.body.token}`
+    const token = jwt.sign(
+      userForToken,
+      process.env.SECRET,
+      { expiresIn: 60*60 }
+    )
+
+    authorization = `Bearer ${token}`
     await Blog.deleteMany({})
     const blogObjects = helper.initialBlogs.map(blog => new Blog({
       ...blog,
@@ -117,6 +124,17 @@ describe('when there is initially some notes saved', () => {
       expect(titles).toContain('Canonical string reduction')
     })
 
+    test('/api/blogs fails when token is not provided', async () => {
+      await api
+        .post('/api/blogs')
+        .send(helper.newBlog)
+        .expect(401)
+        .expect('Content-Type', /application\/json/)
+
+      const response = await api.get('/api/blogs')
+      expect(response.body).toHaveLength(helper.initialBlogs.length)
+    })
+
     test('if the likes property is missing, default to the value 0', async () => {
       const tempBlog = { ...helper.newBlog }
       delete tempBlog.likes
@@ -138,6 +156,7 @@ describe('when there is initially some notes saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('authorization', authorization)
         .send(tempBlog)
         .expect(400)
     })
@@ -148,6 +167,7 @@ describe('when there is initially some notes saved', () => {
 
       await api
         .post('/api/blogs')
+        .set('authorization', authorization)
         .send(tempBlog)
         .expect(400)
     })
