@@ -1,7 +1,8 @@
 import { useState } from "react"
+import Notification from "./Notification"
 import loginService from "../services/login"
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = ({ setUser, message, setMessage, messageStatus,setMessageStatus}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -21,32 +22,40 @@ const LoginForm = ({ setUser }) => {
       )
 
     } catch (exception) {
-      console.log(exception.response.data.error)
+      setMessage('wrong credentials')
+      setMessageStatus('error')
+      setTimeout(() => {
+        setMessage(null)
+        setMessageStatus(null)
+      }, 5000)
     }
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-          <input
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        password
-          <input
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
-      </div>
-      <button type="submit">login</button>
-    </form>      
+    <>
+      <Notification message={message} messageStatus={messageStatus}  />
+      <form onSubmit={handleLogin}>
+        <div>
+          username
+            <input
+            type="text"
+            value={username}
+            name="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </div>
+        <div>
+          password
+            <input
+            type="password"
+            value={password}
+            name="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </div>
+        <button type="submit">login</button>
+      </form>      
+    </>
   )
 }
 

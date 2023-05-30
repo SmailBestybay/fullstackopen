@@ -6,6 +6,8 @@ import blogService from './services/blogs'
 const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
+  const [message, setMessage] = useState(null)
+  const [messageStatus, setMessageStatus] = useState(null)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -32,12 +34,20 @@ const App = () => {
   
       {user === null && <LoginForm 
         setUser={setUser}
+        message={message}
+        setMessage={setMessage}
+        messageStatus={messageStatus}
+        setMessageStatus={setMessageStatus}
       />}
       {user !== null && <Blogs 
         user={user}
         hanldeLogout={hanldeLogout}
         blogs={blogs}
         setBlogs={setBlogs}
+        message={message}
+        setMessage={setMessage}
+        messageStatus={messageStatus}
+        setMessageStatus={setMessageStatus}
       />}
       
     </>
