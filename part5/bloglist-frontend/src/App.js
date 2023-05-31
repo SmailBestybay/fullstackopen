@@ -31,15 +31,15 @@ const App = () => {
 
   return (
     <>
-  
-      {user === null && <LoginForm 
+
+      {user === null && <LoginForm
         setUser={setUser}
         message={message}
         setMessage={setMessage}
         messageStatus={messageStatus}
         setMessageStatus={setMessageStatus}
       />}
-      {user !== null && <Blogs 
+      {user !== null && <Blogs
         user={user}
         hanldeLogout={hanldeLogout}
         blogs={blogs}
@@ -49,7 +49,7 @@ const App = () => {
         messageStatus={messageStatus}
         setMessageStatus={setMessageStatus}
       />}
-      
+
     </>
   )
 }

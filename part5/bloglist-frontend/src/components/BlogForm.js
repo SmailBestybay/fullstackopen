@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
@@ -10,7 +10,7 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
   const handleSubmit = async (event) => {
     event.preventDefault()
     try {
-      const newBlog = {title: title, author: author, url: url}
+      const newBlog = { title: title, author: author, url: url }
       await blogService.create(newBlog)
 
       setBlogs(await blogService.getAll())
@@ -40,29 +40,29 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
       <form onSubmit={handleSubmit}>
         <div>
         title:
-          <input 
+          <input
             type="text"
             value={title}
             name="Title"
-            onChange={({target}) => setTitle(target.value)}
+            onChange={({ target }) => setTitle(target.value)}
           />
         </div>
         <div>
         author:
-          <input 
+          <input
             type="text"
             value={author}
             name="Author"
-            onChange={({target}) => setAuthor(target.value)}
+            onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
         <div>
         url:
-          <input 
+          <input
             type="text"
             value={url}
             name="Url"
-            onChange={({target}) => setUrl(target.value)}
+            onChange={({ target }) => setUrl(target.value)}
           />
         </div>
         <button type="submit">create</button>
@@ -76,9 +76,9 @@ BlogForm.propTypes = {
   setMessage: PropTypes.func.isRequired,
   setMessageStatus: PropTypes.func.isRequired,
   togglableRef: PropTypes.oneOfType([
-    PropTypes.func, 
+    PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })
-]).isRequired
+  ]).isRequired
 }
 
 export default BlogForm

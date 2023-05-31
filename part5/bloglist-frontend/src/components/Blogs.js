@@ -1,44 +1,44 @@
-import Blog from "./Blog"
-import BlogForm from "./BlogForm"
-import Notification from "./Notification"
-import Togglable from "./Togglable"
-import { useRef } from "react"
+import Blog from './Blog'
+import BlogForm from './BlogForm'
+import Notification from './Notification'
+import Togglable from './Togglable'
+import { useRef } from 'react'
 
 const Blogs = (
   {
-    user, hanldeLogout, 
+    user, hanldeLogout,
     blogs, setBlogs,
-    message, setMessage, 
+    message, setMessage,
     messageStatus, setMessageStatus
   }) => {
-    const togglableRef = useRef()
+  const togglableRef = useRef()
 
   return (
     <div>
-        <h2>blogs</h2>
-        <Notification message={message} messageStatus={messageStatus}/>
-        <div>
-          {user.name} logged in 
-          <button onClick={hanldeLogout}>logout</button> 
-        </div>
+      <h2>blogs</h2>
+      <Notification message={message} messageStatus={messageStatus}/>
+      <div>
+        {user.name} logged in
+        <button onClick={hanldeLogout}>logout</button>
+      </div>
 
-        <Togglable buttonLabel='new blog' ref={togglableRef}>
-          <h2>create new</h2>
-          <BlogForm 
-            setBlogs={setBlogs} 
-            setMessage={setMessage} 
-            setMessageStatus={setMessageStatus}
-            togglableRef={togglableRef}
-          />
-        </Togglable>
+      <Togglable buttonLabel='new blog' ref={togglableRef}>
+        <h2>create new</h2>
+        <BlogForm
+          setBlogs={setBlogs}
+          setMessage={setMessage}
+          setMessageStatus={setMessageStatus}
+          togglableRef={togglableRef}
+        />
+      </Togglable>
 
-        {blogs
-          .toSorted((a, b) => b.likes - a.likes)
-          .map(blog =>
-            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
-          )
-        }
+      {blogs
+        .toSorted((a, b) => b.likes - a.likes)
+        .map(blog =>
+          <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
+        )
+      }
     </div>
-)}
+  )}
 
 export default Blogs
