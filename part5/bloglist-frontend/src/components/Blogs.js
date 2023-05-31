@@ -32,9 +32,12 @@ const Blogs = (
           />
         </Togglable>
 
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
-        )}
+        {blogs
+          .toSorted((a, b) => b.likes - a.likes)
+          .map(blog =>
+            <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs}/>
+          )
+        }
     </div>
 )}
 
