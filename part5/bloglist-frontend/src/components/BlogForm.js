@@ -6,7 +6,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageStatus, blogFormRef})
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
-  const createBlog = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
     try {
       const newBlog = {title: title, author: author, url: url}
@@ -35,7 +35,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageStatus, blogFormRef})
   return (
     <>
 
-      <form onSubmit={createBlog}>
+      <form onSubmit={handleSubmit}>
         <div>
         title:
           <input 
