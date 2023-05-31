@@ -11,7 +11,7 @@ const Blogs = (
     message, setMessage, 
     messageStatus, setMessageStatus
   }) => {
-    const blogFormRef = useRef()
+    const togglableRef = useRef()
 
   return (
     <div>
@@ -22,13 +22,13 @@ const Blogs = (
           <button onClick={hanldeLogout}>logout</button> 
         </div>
 
-        <Togglable buttonLabel='new blog' ref={blogFormRef}>
+        <Togglable buttonLabel='new blog' ref={togglableRef}>
           <h2>create new</h2>
           <BlogForm 
             setBlogs={setBlogs} 
             setMessage={setMessage} 
             setMessageStatus={setMessageStatus}
-            blogFormRef={blogFormRef}
+            togglableRef={togglableRef}
           />
         </Togglable>
 

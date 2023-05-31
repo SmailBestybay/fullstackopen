@@ -1,7 +1,8 @@
 import { useState } from "react"
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
-const BlogForm = ({ setBlogs, setMessage, setMessageStatus, blogFormRef}) => {
+const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -16,7 +17,7 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, blogFormRef}) => {
       setTitle('')
       setAuthor('')
       setUrl('')
-      blogFormRef.current.toggleVisibility()
+      togglableRef.current.toggleVisibility()
       setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
       setMessageStatus('success')
       setTimeout(() => {
@@ -68,6 +69,16 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, blogFormRef}) => {
       </form>
     </>
   )
+}
+
+BlogForm.propTypes = {
+  setBlogs: PropTypes.func.isRequired,
+  setMessage: PropTypes.func.isRequired,
+  setMessageStatus: PropTypes.func.isRequired,
+  togglableRef: PropTypes.oneOfType([
+    PropTypes.func, 
+    PropTypes.shape({ current: PropTypes.object })
+]).isRequired
 }
 
 export default BlogForm
