@@ -10,8 +10,8 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageStatus, blogFormRef})
     event.preventDefault()
     try {
       const newBlog = {title: title, author: author, url: url}
-      const newBlogs = await blogService.create(newBlog)
-      setBlogs(blogs.concat(newBlogs))
+      await blogService.create(newBlog)
+      setBlogs(await blogService.getAll())
       setTitle('')
       setAuthor('')
       setUrl('')
