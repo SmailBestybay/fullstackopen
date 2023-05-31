@@ -25,7 +25,6 @@ const Blogs = (
         <Togglable buttonLabel='new blog' ref={blogFormRef}>
           <h2>create new</h2>
           <BlogForm 
-            blogs={blogs} 
             setBlogs={setBlogs} 
             setMessage={setMessage} 
             setMessageStatus={setMessageStatus}
