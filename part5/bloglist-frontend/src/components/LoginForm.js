@@ -33,6 +33,7 @@ const LoginForm = ({ setUser, message, setMessage, messageStatus,setMessageStatu
 
   return (
     <>
+      <h2>log in to application</h2>
       <Notification message={message} messageStatus={messageStatus}  />
       <form onSubmit={handleLogin}>
         <div>
