@@ -11,6 +11,7 @@ const BlogForm = ({ blogs, setBlogs, setMessage, setMessageStatus, blogFormRef})
     try {
       const newBlog = {title: title, author: author, url: url}
       await blogService.create(newBlog)
+
       setBlogs(await blogService.getAll())
       setTitle('')
       setAuthor('')

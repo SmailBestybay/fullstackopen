@@ -1,14 +1,14 @@
 import { useState } from "react"
 import blogService from "../services/blogs"
 
-const Blog = ({blog}) => {
+const Blog = ({blog, blogs, setBlogs}) => {
   const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
     setVisible(!visible)
   }
 
-  const handleLike =  () => {
+  const handleLike =  async () => {
     const newBlog = {
       user: blog.user.id,
       likes: blog.likes + 1,
@@ -16,7 +16,9 @@ const Blog = ({blog}) => {
       title: blog.title,
       url: blog.url,
     }
-    blogService.update(blog.id, newBlog)
+    const updatedBlog = await blogService.update(blog.id, newBlog)
+    const newBlogs = blogs.map(b => b.id === updatedBlog.id ? updatedBlog : b)
+    setBlogs(newBlogs)
   }
 
   const blogStyle = {
