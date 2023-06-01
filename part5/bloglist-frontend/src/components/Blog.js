@@ -29,6 +29,7 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     }
   }
 
+
   return (
     <>
       {visible ? (
