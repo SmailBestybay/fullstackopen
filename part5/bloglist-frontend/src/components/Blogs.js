@@ -7,10 +7,9 @@ import { useRef } from 'react'
 const Blogs = (
   {
     user, hanldeLogout,
-    blogs, setBlogs,
-    message, setMessage,
-    messageStatus, setMessageStatus,
-    handleLike, handleRemove
+    blogs, notify,
+    message, messageStatus,
+    handleLike, handleRemove, createBlog
   }) => {
   const togglableRef = useRef()
 
@@ -26,10 +25,9 @@ const Blogs = (
       <Togglable buttonLabel='new blog' ref={togglableRef}>
         <h2>create new</h2>
         <BlogForm
-          setBlogs={setBlogs}
-          setMessage={setMessage}
-          setMessageStatus={setMessageStatus}
+          notify={notify}
           togglableRef={togglableRef}
+          createBlog={createBlog}
         />
       </Togglable>
 

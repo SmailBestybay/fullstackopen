@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
+
 import PropTypes from 'prop-types'
 
-const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
+const BlogForm = ({ notify, togglableRef, createBlog }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -11,26 +11,15 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
     event.preventDefault()
     try {
       const newBlog = { title: title, author: author, url: url }
-      await blogService.create(newBlog)
+      await createBlog(newBlog)
 
-      setBlogs(await blogService.getAll())
       setTitle('')
       setAuthor('')
       setUrl('')
       togglableRef.current.toggleVisibility()
-      setMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
-      setMessageStatus('success')
-      setTimeout(() => {
-        setMessage(null)
-        setMessageStatus(null)
-      }, 5000)
+      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`, 'success')
     } catch (exception) {
-      setMessage('Invalid Blog Entry')
-      setMessageStatus('error')
-      setTimeout(() => {
-        setMessage(null)
-        setMessageStatus(null)
-      }, 5000)
+      notify('Invalid Blog Entry', 'error')
     }
   }
 
@@ -72,9 +61,8 @@ const BlogForm = ({ setBlogs, setMessage, setMessageStatus, togglableRef }) => {
 }
 
 BlogForm.propTypes = {
-  setBlogs: PropTypes.func.isRequired,
-  setMessage: PropTypes.func.isRequired,
-  setMessageStatus: PropTypes.func.isRequired,
+  createBlog: PropTypes.func.isRequired,
+  notify: PropTypes.func.isRequired,
   togglableRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object })

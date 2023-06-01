@@ -50,20 +50,35 @@ const App = () => {
     }
   }
 
+  const createBlog = async (newBlog) => {
+    await blogService.create(newBlog)
+
+    setBlogs(await blogService.getAll())
+  }
+
+  const notify = (notifyMessage, notifyMessageType) => {
+    setMessage(notifyMessage)
+    setMessageStatus(notifyMessageType)
+    setTimeout(() => {
+      setMessage(null)
+      setMessageStatus(null)
+    }, 5000)
+  }
+
   return (
     <>
 
       {user === null && <LoginForm
         setUser={setUser}
-        message={message} setMessage={setMessage}
-        messageStatus={messageStatus} setMessageStatus={setMessageStatus}
+        message={message}
+        messageStatus={messageStatus}
+        notify={notify}
       />}
       {user !== null && <Blogs
         user={user} hanldeLogout={hanldeLogout}
-        blogs={blogs} setBlogs={setBlogs}
-        message={message} setMessage={setMessage}
-        messageStatus={messageStatus} setMessageStatus={setMessageStatus}
-        handleLike={handleLike} handleRemove={handleRemove}
+        blogs={blogs} notify={notify}
+        message={message} messageStatus={messageStatus}
+        handleLike={handleLike} handleRemove={handleRemove} createBlog={createBlog}
       />}
 
     </>

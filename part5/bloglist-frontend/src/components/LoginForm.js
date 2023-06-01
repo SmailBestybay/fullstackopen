@@ -3,7 +3,7 @@ import Notification from './Notification'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
-const LoginForm = ({ setUser, message, setMessage, messageStatus,setMessageStatus }) => {
+const LoginForm = ({ setUser, message, messageStatus, notify }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -23,12 +23,7 @@ const LoginForm = ({ setUser, message, setMessage, messageStatus,setMessageStatu
       )
 
     } catch (exception) {
-      setMessage('wrong credentials')
-      setMessageStatus('error')
-      setTimeout(() => {
-        setMessage(null)
-        setMessageStatus(null)
-      }, 5000)
+      notify('wrond credentials', 'error')
     }
   }
 
