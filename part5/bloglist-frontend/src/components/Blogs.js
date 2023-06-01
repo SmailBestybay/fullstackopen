@@ -9,7 +9,8 @@ const Blogs = (
     user, hanldeLogout,
     blogs, setBlogs,
     message, setMessage,
-    messageStatus, setMessageStatus
+    messageStatus, setMessageStatus,
+    handleLike, handleRemove
   }) => {
   const togglableRef = useRef()
 
@@ -35,7 +36,9 @@ const Blogs = (
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map(blog =>
-          <Blog key={blog.id} blog={blog} blogs={blogs} setBlogs={setBlogs} user={user}/>
+          <Blog
+            key={blog.id} blog={blog}
+            user={user} handleLike={handleLike} handleRemove={handleRemove}/>
         )
       }
     </div>

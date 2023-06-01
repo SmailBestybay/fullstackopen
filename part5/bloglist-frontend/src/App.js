@@ -29,25 +29,41 @@ const App = () => {
     setUser(null)
   }
 
+  const handleLike =  async (blog) => {
+    const newBlog = {
+      user: blog.user.id,
+      likes: blog.likes + 1,
+      author: blog.author,
+      title: blog.title,
+      url: blog.url,
+    }
+    const updatedBlog = await blogService.update(blog.id, newBlog)
+    const newBlogs = blogs.map(b => b.id === updatedBlog.id ? updatedBlog : b)
+    setBlogs(newBlogs)
+  }
+
+  const handleRemove = async (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      blogService.remove(blog.id)
+      const newBlogs = blogs.filter(b => b.id !== blog.id)
+      setBlogs(newBlogs)
+    }
+  }
+
   return (
     <>
 
       {user === null && <LoginForm
         setUser={setUser}
-        message={message}
-        setMessage={setMessage}
-        messageStatus={messageStatus}
-        setMessageStatus={setMessageStatus}
+        message={message} setMessage={setMessage}
+        messageStatus={messageStatus} setMessageStatus={setMessageStatus}
       />}
       {user !== null && <Blogs
-        user={user}
-        hanldeLogout={hanldeLogout}
-        blogs={blogs}
-        setBlogs={setBlogs}
-        message={message}
-        setMessage={setMessage}
-        messageStatus={messageStatus}
-        setMessageStatus={setMessageStatus}
+        user={user} hanldeLogout={hanldeLogout}
+        blogs={blogs} setBlogs={setBlogs}
+        message={message} setMessage={setMessage}
+        messageStatus={messageStatus} setMessageStatus={setMessageStatus}
+        handleLike={handleLike} handleRemove={handleRemove}
       />}
 
     </>

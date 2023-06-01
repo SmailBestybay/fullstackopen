@@ -1,33 +1,19 @@
 import { useState } from 'react'
-import blogService from '../services/blogs'
 
-const Blog = ({ blog, blogs, setBlogs, user }) => {
+const Blog = ({ blog, user, handleLike, handleRemove }) => {
   const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
     setVisible(!visible)
   }
 
-  const handleLike =  async () => {
-    const newBlog = {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    }
-    const updatedBlog = await blogService.update(blog.id, newBlog)
-    const newBlogs = blogs.map(b => b.id === updatedBlog.id ? updatedBlog : b)
-    setBlogs(newBlogs)
-  }
-
-  const handleRemove = async () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      blogService.remove(blog.id)
-      const newBlogs = blogs.filter(b => b.id !== blog.id)
-      setBlogs(newBlogs)
-    }
-  }
+  // const handleRemove = async () => {
+  //   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+  //     blogService.remove(blog.id)
+  //     const newBlogs = blogs.filter(b => b.id !== blog.id)
+  //     setBlogs(newBlogs)
+  //   }
+  // }
 
 
   return (
@@ -40,13 +26,13 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
           <div><a href={blog.url}>{blog.url}</a></div>
           <div>
             likes {blog.likes}
-            <button onClick={handleLike}>
+            <button onClick={() => handleLike(blog)}>
               like
             </button>
           </div>
           <div>{blog.user.name}</div>
           { user.username === blog.user.username && (
-            <div><button onClick={handleRemove}>remove</button></div>
+            <div><button onClick={() => handleRemove(blog)}>remove</button></div>
           ) }
         </div>
       ) : (
