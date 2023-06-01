@@ -29,18 +29,10 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
     }
   }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
   return (
     <>
       {visible ? (
-        <div style={blogStyle}>
+        <div className='blog'>
           <div>
             {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button>
           </div>
@@ -52,11 +44,13 @@ const Blog = ({ blog, blogs, setBlogs, user }) => {
             </button>
           </div>
           <div>{blog.user.name}</div>
-          { user.username === blog.user.username && (<div><button onClick={handleRemove}>remove</button></div>) }
+          { user.username === blog.user.username && (
+            <div><button onClick={handleRemove}>remove</button></div>
+          ) }
         </div>
       ) : (
-        <div style={blogStyle}>
-          <div>{blog.title} <button onClick={toggleVisibility}>view</button></div>
+        <div className='blog'>
+          <div>{blog.title} {blog.author} <button onClick={toggleVisibility}>view</button></div>
         </div>
       )}
 
