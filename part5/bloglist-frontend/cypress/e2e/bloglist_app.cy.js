@@ -6,9 +6,9 @@ const user = {
 
 describe('Blog app', function() {
   beforeEach(function() {
-    cy.request('POST', 'http://localhost:3003/api/testing/reset')
-    cy.request('POST', 'http://localhost:3003/api/users/', user)
-    cy.visit('http://localhost:3000')
+    cy.request('POST', `${Cypress.env('BACKEND')}/testing/reset`)
+    cy.request('POST', `${Cypress.env('BACKEND')}/users/`, user)
+    cy.visit('')
   })
 
   it('Login form is shown', function () {
@@ -51,6 +51,13 @@ describe('Blog app', function() {
       cy.get('#url').type(newBlog.url)
       cy.get('#create-button').click()
       cy.contains(newBlog.title + ' ' + newBlog.author)
+    })
+
+    it('A blog can be liked', function(){
+      cy.contains('view').click()
+      cy.contains('likes 0')
+      cy.contains('like').click()
+      cy.contains('likes 1')
     })
   })
 })
