@@ -32,4 +32,25 @@ describe('Blog app', function() {
       cy.and('have.css', 'border-style', 'solid')
     })
   })
+
+  describe('When logged in', function() {
+    beforeEach(function(){
+      cy.login(user)
+      cy.addBlog()
+    })
+
+    it('A blog can be created', function() {
+      const newBlog = {
+        title: 'Signals are back!',
+        author: 'Devfluencer ',
+        url: 'bab@dev.to'
+      }
+      cy.contains('new blog').click()
+      cy.get('#title').type(newBlog.title)
+      cy.get('#author').type(newBlog.author)
+      cy.get('#url').type(newBlog.url)
+      cy.get('#create-button').click()
+      cy.contains(newBlog.title + ' ' + newBlog.author)
+    })
+  })
 })
