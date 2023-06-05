@@ -23,7 +23,7 @@ const LoginForm = ({ setUser, message, messageStatus, notify }) => {
       )
 
     } catch (exception) {
-      notify('wrond credentials', 'error')
+      notify('wrong credentials', 'error')
     }
   }
 
@@ -35,6 +35,7 @@ const LoginForm = ({ setUser, message, messageStatus, notify }) => {
         <div>
           username
           <input
+            id='username'
             type="text"
             value={username}
             name="Username"
@@ -44,13 +45,14 @@ const LoginForm = ({ setUser, message, messageStatus, notify }) => {
         <div>
           password
           <input
+            id='password'
             type="password"
             value={password}
             name="Password"
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button type="submit">login</button>
+        <button id='login-button' type="submit">login</button>
       </form>
     </>
   )
