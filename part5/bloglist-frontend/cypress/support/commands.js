@@ -32,12 +32,7 @@ Cypress.Commands.add('login', ({ username, password }) => {
     })
 })
 
-Cypress.Commands.add('addBlog', () => {
-  const newBlog = {
-    title: 'Will the AI take over?',
-    author: 'Doomfluencer',
-    url: 'prop@poo.com'
-  }
+Cypress.Commands.add('addBlog', (newBlog) => {
   const token = JSON.parse(localStorage.getItem('loggedBlogAppUser')).token
   cy.request({
     method: 'POST',

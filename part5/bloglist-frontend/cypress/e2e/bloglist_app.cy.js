@@ -36,7 +36,12 @@ describe('Blog app', function() {
   describe('When logged in', function() {
     beforeEach(function(){
       cy.login(user)
-      cy.addBlog()
+      const newBlog = {
+        title: 'Will the AI take over with 0 likes?',
+        author: 'Doomfluencer',
+        url: 'prop@poo.com'
+      }
+      cy.addBlog(newBlog)
     })
 
     it('A blog can be created', function() {
@@ -55,9 +60,9 @@ describe('Blog app', function() {
 
     it('A blog can be liked', function(){
       cy.contains('view').click()
-      cy.contains('likes 0')
-      cy.contains('like').click()
-      cy.contains('likes 1')
+      cy.get('.like-count').as('likeCount').contains('likes 0')
+      cy.get('.like').click()
+      cy.get('@likeCount').contains('likes 1')
     })
 
     it('A blog can be deleted', function() {
@@ -76,6 +81,40 @@ describe('Blog app', function() {
       cy.login(userWithoutBlogs)
       cy.contains('view').click()
       cy.get('.blog').should('not.contain', 'remove')
+    })
+
+    it('the blogs are ordered according to likes in descending order', function() {
+      const blogOneLike = {
+        title: 'One like blog',
+        author: 'Doomfluencer',
+        url: 'prop@poo.com'
+      }
+      const blogTwoLikes = {
+        title: 'Two like blog',
+        author: 'Doomfluencer',
+        url: 'prop@poo.com'
+      }
+      cy.addBlog(blogOneLike)
+      cy.addBlog(blogTwoLikes)
+
+      cy.get('.blog')
+        .contains(blogOneLike.title)
+        .contains('view')
+        .click()
+        .get('.like')
+        .click()
+
+      cy.get('.blog')
+        .contains(blogTwoLikes.title)
+        .contains('view')
+        .click()
+        .get('.like')
+        .click({ multiple: true })
+        .click({ multiple: true })
+
+      cy.get('.blog').eq(0).should('contain', blogTwoLikes.title)
+      cy.get('.blog').eq(1).should('contain', blogOneLike.title)
+      cy.get('.blog').eq(2).contains('view').click().get('.like-count').contains('0')
     })
   })
 })
