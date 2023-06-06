@@ -65,5 +65,17 @@ describe('Blog app', function() {
       cy.contains('remove').click()
       cy.get('html').should('not.contain', 'view')
     })
+
+    it('only the creator can see the delete button of a blog', function () {
+      const userWithoutBlogs = {
+        name: 'noBlogPerson',
+        username: 'bloglessDEV',
+        password: 'ewwwblogs',
+      }
+      cy.request('POST', `${Cypress.env('BACKEND')}/users/`, userWithoutBlogs)
+      cy.login(userWithoutBlogs)
+      cy.contains('view').click()
+      cy.get('.blog').should('not.contain', 'remove')
+    })
   })
 })
