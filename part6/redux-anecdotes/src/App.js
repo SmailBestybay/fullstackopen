@@ -4,14 +4,12 @@ import AnecdoteList from './components/AnecdoteList'
 import Filter from './components/Filter'
 import Notification from './components/Notification'
 import { useEffect } from 'react'
-import anecdoteSevice from './services/anecdotes'
-import { setAnecdotes } from './reducers/anecdoteReducer'
+import { initializeAnecdotes } from './reducers/anecdoteReducer'
 
 const App = () => {
   const dispath = useDispatch()
   useEffect(() => {
-    anecdoteSevice
-      .getAll().then(anecdotes => dispath(setAnecdotes(anecdotes)))
+    dispath(initializeAnecdotes())
   }, [dispath])
 
   return (
