@@ -16,9 +16,16 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({content})
-    notificationDispatch({type: 'NEW', payload: content})
-    setTimeout(() => notificationDispatch({type: 'CLEAR'}), 5000)
+    newAnecdoteMutation.mutate({content}, {
+      onSuccess: () => {
+        notificationDispatch({type: 'NEW', payload: content})
+        setTimeout(() => notificationDispatch({type: 'CLEAR'}), 5000)
+      },
+      onError: (error) => {
+        notificationDispatch({type: 'ERROR', payload: error.response.data.error})
+        setTimeout(() => notificationDispatch({type: 'CLEAR'}), 5000)
+      } 
+    })
 }
 
   return (
