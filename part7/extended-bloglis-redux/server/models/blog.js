@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const blogSchema = new mongoose.Schema({
   title: String,
@@ -7,19 +7,18 @@ const blogSchema = new mongoose.Schema({
   likes: Number,
   user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }
-})
+    ref: "User",
+  },
+});
 
-blogSchema.set('toJSON', {
+blogSchema.set("toJSON", {
   transform: (document, retunedObject) => {
     // _id property of Mongoose objects looks like a string, but it is in fact an object
     // It is safer to transform it into a string here.
-    retunedObject.id = retunedObject._id.toString()
-    delete retunedObject._id
-    delete retunedObject.__v
-  }
-})
+    retunedObject.id = retunedObject._id.toString();
+    delete retunedObject._id;
+    delete retunedObject.__v;
+  },
+});
 
-module.exports = mongoose.model('Blog', blogSchema)
-
+module.exports = mongoose.model("Blog", blogSchema);

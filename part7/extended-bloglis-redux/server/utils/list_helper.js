@@ -1,13 +1,15 @@
 // eslint-disable-next-line no-unused-vars
 const dummy = (blogs) => {
-  return 1
-}
+  return 1;
+};
 
-const totalLikes = (blogs) => blogs.reduce((acc, blog) => acc += blog.likes, 0)
+const totalLikes = (blogs) =>
+  blogs.reduce((acc, blog) => (acc += blog.likes), 0);
 
-const favoriteBlog = (blogs) => blogs.reduce((acc, blog) => {
-  return acc.likes > blog.likes ? { ...acc } : { ...blog }
-}, {})
+const favoriteBlog = (blogs) =>
+  blogs.reduce((acc, blog) => {
+    return acc.likes > blog.likes ? { ...acc } : { ...blog };
+  }, {});
 
 /*
 first, calculate how many blogs each author has.
@@ -21,36 +23,38 @@ first, calculate how many blogs each author has.
 second, find the author with most blogs.
   reduce again keeping the author with most blogs in the accumilator
 */
-const mostBlogs = (blogs) => Object.values(
-  blogs.reduce((acc, blog) => {
-    const currCount = acc[blog.author] ? acc[blog.author].blogs : 0
-    return {
-      ...acc,
-      [blog.author]: {
-        author: blog.author,
-        blogs: currCount + 1
-      }
-    }
-  }, {})
-).reduce((acc, author) => author.blogs < acc.blogs ? acc : author, {})
+const mostBlogs = (blogs) =>
+  Object.values(
+    blogs.reduce((acc, blog) => {
+      const currCount = acc[blog.author] ? acc[blog.author].blogs : 0;
+      return {
+        ...acc,
+        [blog.author]: {
+          author: blog.author,
+          blogs: currCount + 1,
+        },
+      };
+    }, {})
+  ).reduce((acc, author) => (author.blogs < acc.blogs ? acc : author), {});
 
-const mostLikes = (blogs) => Object.values(
-  blogs.reduce((acc, blog) => {
-    const currCount = acc[blog.author] ? acc[blog.author].likes : 0
-    return {
-      ...acc,
-      [blog.author]: {
-        author: blog.author,
-        likes: currCount + blog.likes
-      }
-    }
-  }, {})
-).reduce((acc, author) => author.likes < acc.likes ? acc : author, {})
+const mostLikes = (blogs) =>
+  Object.values(
+    blogs.reduce((acc, blog) => {
+      const currCount = acc[blog.author] ? acc[blog.author].likes : 0;
+      return {
+        ...acc,
+        [blog.author]: {
+          author: blog.author,
+          likes: currCount + blog.likes,
+        },
+      };
+    }, {})
+  ).reduce((acc, author) => (author.likes < acc.likes ? acc : author), {});
 
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
-  mostLikes
-}
+  mostLikes,
+};
