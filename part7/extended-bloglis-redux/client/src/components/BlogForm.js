@@ -1,36 +1,38 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 
 const BlogForm = ({ notify, togglableRef, createBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleSubmit = async (event) => {
-    event.preventDefault()
+    event.preventDefault();
     try {
-      const newBlog = { title: title, author: author, url: url }
-      await createBlog(newBlog)
+      const newBlog = { title: title, author: author, url: url };
+      await createBlog(newBlog);
 
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-      togglableRef.current.toggleVisibility()
-      notify(`a new blog ${newBlog.title} by ${newBlog.author} added`, 'success')
+      setTitle("");
+      setAuthor("");
+      setUrl("");
+      togglableRef.current.toggleVisibility();
+      notify(
+        `a new blog ${newBlog.title} by ${newBlog.author} added`,
+        "success"
+      );
     } catch (exception) {
-      notify('Invalid Blog Entry', 'error')
+      notify("Invalid Blog Entry", "error");
     }
-  }
+  };
 
   return (
     <>
-
       <form onSubmit={handleSubmit}>
         <div>
-        title:
+          title:
           <input
-            id='title'
+            id="title"
             type="text"
             value={title}
             name="Title"
@@ -38,9 +40,9 @@ const BlogForm = ({ notify, togglableRef, createBlog }) => {
           />
         </div>
         <div>
-        author:
+          author:
           <input
-            id='author'
+            id="author"
             type="text"
             value={author}
             name="Author"
@@ -48,28 +50,30 @@ const BlogForm = ({ notify, togglableRef, createBlog }) => {
           />
         </div>
         <div>
-        url:
+          url:
           <input
-            id='url'
+            id="url"
             type="text"
             value={url}
             name="Url"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
-        <button id='create-button' type="submit">create</button>
+        <button id="create-button" type="submit">
+          create
+        </button>
       </form>
     </>
-  )
-}
+  );
+};
 
 BlogForm.propTypes = {
   createBlog: PropTypes.func.isRequired,
   notify: PropTypes.func.isRequired,
   togglableRef: PropTypes.oneOfType([
     PropTypes.func,
-    PropTypes.shape({ current: PropTypes.object })
-  ]).isRequired
-}
+    PropTypes.shape({ current: PropTypes.object }),
+  ]).isRequired,
+};
 
-export default BlogForm
+export default BlogForm;

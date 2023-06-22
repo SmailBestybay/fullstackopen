@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useState } from "react";
 
 const Blog = ({ blog, user, handleLike, handleRemove }) => {
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(false);
 
   const toggleVisibility = () => {
-    setVisible(!visible)
-  }
+    setVisible(!visible);
+  };
 
   // const handleRemove = async () => {
   //   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
@@ -15,36 +15,40 @@ const Blog = ({ blog, user, handleLike, handleRemove }) => {
   //   }
   // }
 
-
   return (
     <>
       {visible ? (
-        <div className='blog'>
+        <div className="blog">
           <div>
-            {blog.title} {blog.author} <button onClick={toggleVisibility}>hide</button>
+            {blog.title} {blog.author}{" "}
+            <button onClick={toggleVisibility}>hide</button>
           </div>
-          <div><a href={blog.url}>{blog.url}</a></div>
-          <div className='like-count'>
+          <div>
+            <a href={blog.url}>{blog.url}</a>
+          </div>
+          <div className="like-count">
             likes {blog.likes}
-            <button className='like' onClick={() => handleLike(blog)}>
+            <button className="like" onClick={() => handleLike(blog)}>
               like
             </button>
           </div>
           <div>{blog.user.name}</div>
-          { user.username === blog.user.username && (
-            <div><button onClick={() => handleRemove(blog)}>remove</button></div>
-          ) }
+          {user.username === blog.user.username && (
+            <div>
+              <button onClick={() => handleRemove(blog)}>remove</button>
+            </div>
+          )}
         </div>
       ) : (
-        <div className='blog'>
-          <div>{blog.title} {blog.author} <button onClick={toggleVisibility}>view</button></div>
+        <div className="blog">
+          <div>
+            {blog.title} {blog.author}{" "}
+            <button onClick={toggleVisibility}>view</button>
+          </div>
         </div>
       )}
-
-
     </>
-  )
-}
+  );
+};
 
-
-export default Blog
+export default Blog;
