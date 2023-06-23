@@ -1,11 +1,14 @@
 import { useState } from "react";
-
+import { useDispatch } from "react-redux";
+import { setNotification } from "../reducers/notificationReducer";
 import PropTypes from "prop-types";
 
-const BlogForm = ({ notify, togglableRef, createBlog }) => {
+const BlogForm = ({ togglableRef, createBlog }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -17,12 +20,19 @@ const BlogForm = ({ notify, togglableRef, createBlog }) => {
       setAuthor("");
       setUrl("");
       togglableRef.current.toggleVisibility();
-      notify(
-        `a new blog ${newBlog.title} by ${newBlog.author} added`,
-        "success"
+      dispatch(
+        setNotification({
+          message: `a new blog ${newBlog.title} by ${newBlog.author} added`,
+          status: "success",
+        })
       );
     } catch (exception) {
-      notify("Invalid Blog Entry", "error");
+      dispatch(
+        setNotification({
+          message: "Invalid Blog Entry",
+          status: "error",
+        })
+      );
     }
   };
 
@@ -69,7 +79,6 @@ const BlogForm = ({ notify, togglableRef, createBlog }) => {
 
 BlogForm.propTypes = {
   createBlog: PropTypes.func.isRequired,
-  notify: PropTypes.func.isRequired,
   togglableRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object }),

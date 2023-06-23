@@ -7,14 +7,6 @@ const Blog = ({ blog, user, handleLike, handleRemove }) => {
     setVisible(!visible);
   };
 
-  // const handleRemove = async () => {
-  //   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-  //     blogService.remove(blog.id)
-  //     const newBlogs = blogs.filter(b => b.id !== blog.id)
-  //     setBlogs(newBlogs)
-  //   }
-  // }
-
   return (
     <>
       {visible ? (

@@ -9,8 +9,6 @@ const Blogs = ({
   hanldeLogout,
   blogs,
   notify,
-  message,
-  messageStatus,
   handleLike,
   handleRemove,
   createBlog,
@@ -20,7 +18,7 @@ const Blogs = ({
   return (
     <div>
       <h2>blogs</h2>
-      <Notification message={message} messageStatus={messageStatus} />
+      <Notification/>
       <div>
         {user.name} logged in
         <button onClick={hanldeLogout}>logout</button>

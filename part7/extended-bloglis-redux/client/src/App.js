@@ -6,8 +6,6 @@ import blogService from "./services/blogs";
 const App = () => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
-  const [message, setMessage] = useState(null);
-  const [messageStatus, setMessageStatus] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -56,23 +54,12 @@ const App = () => {
     setBlogs(await blogService.getAll());
   };
 
-  const notify = (notifyMessage, notifyMessageType) => {
-    setMessage(notifyMessage);
-    setMessageStatus(notifyMessageType);
-    setTimeout(() => {
-      setMessage(null);
-      setMessageStatus(null);
-    }, 5000);
-  };
 
   return (
     <>
       {user === null && (
         <LoginForm
           setUser={setUser}
-          message={message}
-          messageStatus={messageStatus}
-          notify={notify}
         />
       )}
       {user !== null && (
@@ -80,9 +67,6 @@ const App = () => {
           user={user}
           hanldeLogout={hanldeLogout}
           blogs={blogs}
-          notify={notify}
-          message={message}
-          messageStatus={messageStatus}
           handleLike={handleLike}
           handleRemove={handleRemove}
           createBlog={createBlog}

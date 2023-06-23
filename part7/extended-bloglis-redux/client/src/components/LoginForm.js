@@ -5,7 +5,7 @@ import blogService from "../services/blogs";
 import { setNotification } from "../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 
-const LoginForm = ({ setUser, message, messageStatus }) => {
+const LoginForm = ({ setUser }) => {
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
@@ -34,7 +34,7 @@ const LoginForm = ({ setUser, message, messageStatus }) => {
   return (
     <>
       <h2>log in to application</h2>
-      <Notification message={message} messageStatus={messageStatus} />
+      <Notification />
       <form onSubmit={handleLogin}>
         <div>
           username
