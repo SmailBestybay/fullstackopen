@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setNotification } from "../reducers/notificationReducer";
+import { createBlog } from "../reducers/blogReducer";
 import PropTypes from "prop-types";
 
-const BlogForm = ({ togglableRef, createBlog }) => {
+const BlogForm = ({ togglableRef }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
@@ -14,7 +15,8 @@ const BlogForm = ({ togglableRef, createBlog }) => {
     event.preventDefault();
     try {
       const newBlog = { title: title, author: author, url: url };
-      await createBlog(newBlog);
+      // await createBlog(newBlog);
+      dispatch(createBlog(newBlog));
 
       setTitle("");
       setAuthor("");
@@ -78,7 +80,6 @@ const BlogForm = ({ togglableRef, createBlog }) => {
 };
 
 BlogForm.propTypes = {
-  createBlog: PropTypes.func.isRequired,
   togglableRef: PropTypes.oneOfType([
     PropTypes.func,
     PropTypes.shape({ current: PropTypes.object }),

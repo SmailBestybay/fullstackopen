@@ -7,16 +7,16 @@ import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
   const [user, setUser] = useState(null);
-  
+
   // const [blogs, setBlogs] = useState([]);
   // useEffect(() => {
   //   blogService.getAll().then((blogs) => setBlogs(blogs));
   // }, []);
 
-    const dispath = useDispatch()
-    useEffect(() => {
-      dispath(initializeBlogs())
-    }, [dispath])
+  const dispath = useDispatch();
+  useEffect(() => {
+    dispath(initializeBlogs());
+  }, [dispath]);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
@@ -61,14 +61,9 @@ const App = () => {
   //   setBlogs(await blogService.getAll());
   // };
 
-
   return (
     <>
-      {user === null && (
-        <LoginForm
-          setUser={setUser}
-        />
-      )}
+      {user === null && <LoginForm setUser={setUser} />}
       {user !== null && (
         <Blogs
           user={user}

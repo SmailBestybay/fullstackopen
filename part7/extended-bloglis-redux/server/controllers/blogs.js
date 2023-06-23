@@ -40,7 +40,7 @@ blogRouter.post("/", middleware.userExtractor, async (request, response) => {
 
   response
     .status(201)
-    .json(savedBlog.populate("user", { username: 1, name: 1 }));
+    .json(await savedBlog.populate("user", { username: 1, name: 1 }));
 });
 
 blogRouter.delete(
