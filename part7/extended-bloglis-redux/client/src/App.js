@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import {  useEffect } from "react";
 import Blogs from "./components/Blogs";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { initializeBlogs } from "./reducers/blogReducer";
+import { setUser } from "./reducers/userReducer";
 
 const App = () => {
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
+  const user = useSelector((state) => state.user);
 
   // const [blogs, setBlogs] = useState([]);
   // useEffect(() => {
@@ -22,14 +24,14 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
-      setUser(user);
+      dispath(setUser(user));
       blogService.setToken(user.token);
     }
   }, []);
 
   const hanldeLogout = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
-    setUser(null);
+    dispath(setUser(null));
   };
 
   // const handleLike = async (blog) => {
@@ -63,7 +65,7 @@ const App = () => {
 
   return (
     <>
-      {user === null && <LoginForm setUser={setUser} />}
+      {user === null && <LoginForm />}
       {user !== null && (
         <Blogs
           user={user}

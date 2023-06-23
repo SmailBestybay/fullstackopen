@@ -1,11 +1,12 @@
 import { useState } from "react";
 import Notification from "./Notification";
-import loginService from "../services/login";
-import blogService from "../services/blogs";
-import { setNotification } from "../reducers/notificationReducer";
+// import loginService from "../services/login";
+// import blogService from "../services/blogs";
+// import { setNotification } from "../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
+import { loginUser } from "../reducers/userReducer";
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
   const dispatch = useDispatch();
 
   const [username, setUsername] = useState("");
@@ -14,21 +15,22 @@ const LoginForm = ({ setUser }) => {
   const handleLogin = async (event) => {
     event.preventDefault();
 
-    try {
-      const user = await loginService.login({
-        username,
-        password,
-      });
-      setUser(user);
-      setUsername("");
-      setPassword("");
-      blogService.setToken(user.token);
-      window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-    } catch (exception) {
-      dispatch(
-        setNotification({ message: "wrong credentials", status: "error" })
-      );
-    }
+    // try {
+    // const user = await loginService.login({
+    //   username,
+    //   password,
+    // });
+    // setUser(user);
+    // blogService.setToken(user.token);
+    // window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
+    dispatch(loginUser(username, password));
+    setUsername("");
+    setPassword("");
+    // } catch (exception) {
+    //   dispatch(
+    //     setNotification({ message: "wrong credentials", status: "error" })
+    //   );
+    // }
   };
 
   return (
