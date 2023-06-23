@@ -1,12 +1,19 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addLikeThunk } from "../reducers/blogReducer";
 
-const Blog = ({ blog, user, handleLike, handleRemove }) => {
+const Blog = ({ blog, user, handleRemove }) => {
   const [visible, setVisible] = useState(false);
+  const dispatch = useDispatch()
 
   const toggleVisibility = () => {
     setVisible(!visible);
   };
 
+  const handleLike = (blog) => {
+    const newBlog = {...blog, user: blog.user.id}
+    dispatch(addLikeThunk(newBlog))
+  }
   return (
     <>
       {visible ? (
