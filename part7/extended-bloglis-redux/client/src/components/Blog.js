@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addLikeThunk } from "../reducers/blogReducer";
+import { addLikeThunk, deleteBlog } from "../reducers/blogReducer";
 
-const Blog = ({ blog, user, handleRemove }) => {
+const Blog = ({ blog, user }) => {
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch()
 
@@ -14,6 +14,13 @@ const Blog = ({ blog, user, handleRemove }) => {
     const newBlog = {...blog, user: blog.user.id}
     dispatch(addLikeThunk(newBlog))
   }
+
+  const handleRemove = (blog) => {
+    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+      dispatch(deleteBlog(blog))
+    }
+  }
+  
   return (
     <>
       {visible ? (
