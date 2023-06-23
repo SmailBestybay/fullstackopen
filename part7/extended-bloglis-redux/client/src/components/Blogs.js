@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import Blog from "./Blog";
 import BlogForm from "./BlogForm";
 import Notification from "./Notification";
@@ -7,18 +8,20 @@ import { useRef } from "react";
 const Blogs = ({
   user,
   hanldeLogout,
-  blogs,
-  notify,
-  handleLike,
-  handleRemove,
-  createBlog,
+  // blogs,
+  // notify,
+  // handleLike,
+  // handleRemove,
+  // createBlog,
 }) => {
   const togglableRef = useRef();
+
+  const blogs = useSelector((state) => state.blogs);
 
   return (
     <div>
       <h2>blogs</h2>
-      <Notification/>
+      <Notification />
       <div>
         {user.name} logged in
         <button onClick={hanldeLogout}>logout</button>
@@ -27,9 +30,8 @@ const Blogs = ({
       <Togglable buttonLabel="new blog" ref={togglableRef}>
         <h2>create new</h2>
         <BlogForm
-          notify={notify}
           togglableRef={togglableRef}
-          createBlog={createBlog}
+          // createBlog={createBlog}
         />
       </Togglable>
 
@@ -40,8 +42,8 @@ const Blogs = ({
             key={blog.id}
             blog={blog}
             user={user}
-            handleLike={handleLike}
-            handleRemove={handleRemove}
+            // handleLike={handleLike}
+            // handleRemove={handleRemove}
           />
         ))}
     </div>

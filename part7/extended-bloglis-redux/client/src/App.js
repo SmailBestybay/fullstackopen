@@ -2,14 +2,21 @@ import { useState, useEffect } from "react";
 import Blogs from "./components/Blogs";
 import LoginForm from "./components/LoginForm";
 import blogService from "./services/blogs";
+import { useDispatch } from "react-redux";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
+  
+  // const [blogs, setBlogs] = useState([]);
+  // useEffect(() => {
+  //   blogService.getAll().then((blogs) => setBlogs(blogs));
+  // }, []);
 
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
+    const dispath = useDispatch()
+    useEffect(() => {
+      dispath(initializeBlogs())
+    }, [dispath])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogAppUser");
@@ -25,34 +32,34 @@ const App = () => {
     setUser(null);
   };
 
-  const handleLike = async (blog) => {
-    const newBlog = {
-      user: blog.user.id,
-      likes: blog.likes + 1,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-    };
-    const updatedBlog = await blogService.update(blog.id, newBlog);
-    const newBlogs = blogs.map((b) =>
-      b.id === updatedBlog.id ? updatedBlog : b
-    );
-    setBlogs(newBlogs);
-  };
+  // const handleLike = async (blog) => {
+  //   const newBlog = {
+  //     user: blog.user.id,
+  //     likes: blog.likes + 1,
+  //     author: blog.author,
+  //     title: blog.title,
+  //     url: blog.url,
+  //   };
+  //   const updatedBlog = await blogService.update(blog.id, newBlog);
+  //   const newBlogs = blogs.map((b) =>
+  //     b.id === updatedBlog.id ? updatedBlog : b
+  //   );
+  //   setBlogs(newBlogs);
+  // };
 
-  const handleRemove = async (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      blogService.remove(blog.id);
-      const newBlogs = blogs.filter((b) => b.id !== blog.id);
-      setBlogs(newBlogs);
-    }
-  };
+  // const handleRemove = async (blog) => {
+  //   if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
+  //     blogService.remove(blog.id);
+  //     const newBlogs = blogs.filter((b) => b.id !== blog.id);
+  //     setBlogs(newBlogs);
+  //   }
+  // };
 
-  const createBlog = async (newBlog) => {
-    await blogService.create(newBlog);
+  // const createBlog = async (newBlog) => {
+  //   await blogService.create(newBlog);
 
-    setBlogs(await blogService.getAll());
-  };
+  //   setBlogs(await blogService.getAll());
+  // };
 
 
   return (
@@ -66,10 +73,10 @@ const App = () => {
         <Blogs
           user={user}
           hanldeLogout={hanldeLogout}
-          blogs={blogs}
-          handleLike={handleLike}
-          handleRemove={handleRemove}
-          createBlog={createBlog}
+          // blogs={blogs}
+          // handleLike={handleLike}
+          // handleRemove={handleRemove}
+          // createBlog={createBlog}
         />
       )}
     </>
