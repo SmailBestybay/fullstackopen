@@ -5,9 +5,11 @@ import Notification from "./Notification";
 // import { setNotification } from "../reducers/notificationReducer";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../reducers/userReducer";
+import { useNotificationDispatch } from "../NotificationContext";
 
 const LoginForm = () => {
-  const dispatch = useDispatch();
+  const dispatchRedux = useDispatch();
+  const dispatch = useNotificationDispatch();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +25,10 @@ const LoginForm = () => {
     // setUser(user);
     // blogService.setToken(user.token);
     // window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
-    dispatch(loginUser(username, password));
+    dispatchRedux(loginUser(username, password));
+    dispatch({ type: "SET", message: "wrong credentials", status: "error" });
+    setTimeout(() => dispatch({ type: "CLEAR" }), 2000);
+
     setUsername("");
     setPassword("");
     // } catch (exception) {

@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import loginService from "../services/login";
 import blogService from "../services/blogs";
-import { setNotification } from "./notificationReducer";
+// import { setNotification } from "./notificationReducer";
 
 const userSlice = createSlice({
   name: "user",
@@ -24,9 +24,10 @@ export const loginUser = (username, password) => {
       window.localStorage.setItem("loggedBlogAppUser", JSON.stringify(user));
       dispatch(setUser(user));
     } catch (exception) {
-      dispatch(
-        setNotification({ message: "wrong credentials", status: "error" })
-      );
+      console.log('REDUX NOTIFICATION WOULD BE HERE')
+      // dispatch(
+      //   setNotification({ message: "wrong credentials", status: "error" })
+      // );
     }
   };
 };
