@@ -29,7 +29,7 @@ const App = () => {
     }
   }, []);
 
-  const hanldeLogout = () => {
+  const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogAppUser");
     dispath(setUser(null));
   };
@@ -69,7 +69,7 @@ const App = () => {
       {user !== null && (
         <Blogs
           user={user}
-          hanldeLogout={hanldeLogout}
+          handleLogout={handleLogout}
           // blogs={blogs}
           // handleLike={handleLike}
           // handleRemove={handleRemove}

@@ -7,7 +7,7 @@ import { useRef } from "react";
 
 const Blogs = ({
   user,
-  hanldeLogout,
+  handleLogout,
   // blogs,
   // notify,
   // handleLike,
@@ -24,7 +24,7 @@ const Blogs = ({
       <Notification />
       <div>
         {user.name} logged in
-        <button onClick={hanldeLogout}>logout</button>
+        <button onClick={handleLogout}>logout</button>
       </div>
 
       <Togglable buttonLabel="new blog" ref={togglableRef}>
