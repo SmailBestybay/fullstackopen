@@ -1,38 +1,28 @@
-import axios from "axios";
-const baseUrl = "/api/blogs";
+import axios from 'axios'
+import storageService from '../services/storage'
+const baseUrl = '/api/blogs'
 
-let token = null;
+const headers = {
+  'Authorization': storageService.loadUser() ? `Bearer ${storageService.loadUser().token}` : null
+}
 
-const setToken = (newToken) => {
-  token = `Bearer ${newToken}`;
-};
+const getAll = async () => {
+  const request = await axios.get(baseUrl)
+  return request.data
+}
 
-const getAll = () => {
-  const request = axios.get(baseUrl);
-  return request.then((response) => response.data);
-};
+const create = async (object) => {
+  const request = await axios.post(baseUrl, object, { headers })
+  return request.data
+}
 
-const create = async (newObject) => {
-  const config = {
-    headers: { Authorization: token },
-  };
+const update = async (object) => {
+  const request = await axios.put(`${baseUrl}/${object.id}`, object, { headers })
+  return request.data
+}
 
-  const response = await axios.post(baseUrl, newObject, config);
-  return response.data;
-};
+const remove = async (id) => {
+  await axios.delete(`${baseUrl}/${id}`, { headers })
+}
 
-const update = (newObject) => {
-  const request = axios.put(`${baseUrl}/${newObject.id}`, newObject);
-  return request.then((response) => response.data);
-};
-
-const remove = (id) => {
-  const config = {
-    headers: { Authorization: token },
-  };
-  const request = axios.delete(`${baseUrl}/${id}`, config);
-  return request.then((response) => response.data);
-};
-
-// eslint-disable-next-line
-export default { getAll, create, setToken, update, remove };
+export default { getAll, create, update, remove }

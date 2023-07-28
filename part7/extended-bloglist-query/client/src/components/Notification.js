@@ -1,20 +1,23 @@
-// import { useSelector } from "react-redux";
-import { useNotificationValue } from "../NotificationContext";
+const Notification = ({ info }) => {
+  if (!info.message) {
+    return
+  }
 
-const Notification = () => {
-  // const notification = useSelector((state) => {
-  //   return state.notification;
-  // });
-
-  const notification = useNotificationValue();
+  const style = {
+    color: info.type==='error' ? 'red' : 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
 
   return (
-    <>
-      {notification.message && (
-        <div className={notification.status}>{notification.message}</div>
-      )}
-    </>
-  );
-};
+    <div style={style}>
+      {info.message}
+    </div>
+  )
+}
 
-export default Notification;
+export default Notification

@@ -6,7 +6,7 @@ module.exports = {
     "jest/globals": true,
     "cypress/globals": true,
   },
-  extends: ["eslint:recommended", "plugin:react/recommended", "prettier"],
+  extends: ["eslint:recommended", "plugin:react/recommended"],
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

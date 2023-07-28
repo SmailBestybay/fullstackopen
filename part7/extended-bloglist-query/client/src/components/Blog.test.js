@@ -2,65 +2,60 @@ import React from "react";
 import "@testing-library/jest-dom/extend-expect";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+
 import Blog from "./Blog";
 
-describe("blog component", () => {
-  let blog;
+describe("Blog", () => {
+  const blog = {
+    title: "Goto considered harmful",
+    author: "Edsger Dijkstra",
+    url: "google.com",
+    likes: 1,
+  };
+
+  const likeHandler = jest.fn();
 
   beforeEach(() => {
-    blog = {
-      title: "Test title",
-      author: "Tester Author",
-      likes: 0,
-      user: {
-        name: "Tester is the name",
-        username: "Tester is the username",
-        id: "123123",
-      },
-      url: "example@url.com",
-    };
+    render(
+      <Blog
+        blog={blog}
+        remove={jest.fn()}
+        canRemove={true}
+        like={likeHandler}
+      />
+    );
   });
 
-  test("renders blog title and author", () => {
-    render(<Blog blog={blog} user={blog.user} />);
-    const element = screen.getByText("Test title Tester Author");
-    expect(element).toBeDefined();
+  test("renders only title and author by default", () => {
+    screen.getByText(blog.title, { exact: false });
+    screen.getByText(blog.author, { exact: false });
+
+    const ulrElement = screen.queryByText(blog.url, { exact: false });
+    expect(ulrElement).toBeNull();
+
+    const likesElement = screen.queryByText("likes", { exact: false });
+    expect(likesElement).toBeNull();
   });
 
-  test("does not render url by default", () => {
-    render(<Blog blog={blog} user={blog.user} />);
-    const url = screen.queryByText(blog.url);
-    expect(url).toBeNull();
-  });
-
-  test("does not render likes by default", () => {
-    render(<Blog blog={blog} user={blog.user} />);
-    const likes = screen.queryByText(blog.url);
-    expect(likes).toBeNull();
-  });
-
-  test("url and likes are shown when the view butoon is clicked", async () => {
-    render(<Blog blog={blog} user={blog.user} />);
+  test("renders also details when asked to be shown", async () => {
     const user = userEvent.setup();
-    const button = screen.getByText("view");
+    const button = screen.getByText("show");
     await user.click(button);
-    const nameElement = screen.getByText("Tester is the name");
-    expect(nameElement).toBeDefined();
-    const likesElement = screen.queryByText("likes");
-    expect(likesElement).toBeDefined();
+
+    screen.getByText(blog.url, { exact: false });
+    screen.getByText(`likes ${blog.likes}`, { exact: false });
   });
 
-  test("triggers event handler twice when like button is clicked twice", async () => {
-    const mockHandler = jest.fn();
-    render(<Blog blog={blog} user={blog.user} handleLike={mockHandler} />);
+  test("if liked twice, ", async () => {
     const user = userEvent.setup();
-    const viewButton = screen.getByText("view");
-    await user.click(viewButton);
+
+    const showButton = screen.getByText("show");
+    await user.click(showButton);
 
     const likeButton = screen.getByText("like");
     await user.click(likeButton);
     await user.click(likeButton);
 
-    expect(mockHandler.mock.calls).toHaveLength(2);
+    expect(likeHandler.mock.calls).toHaveLength(2);
   });
 });

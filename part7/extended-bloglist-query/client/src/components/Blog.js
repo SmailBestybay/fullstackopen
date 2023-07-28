@@ -1,60 +1,43 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addLikeThunk, deleteBlog } from "../reducers/blogReducer";
+import { useState } from 'react'
+import PropTypes from 'prop-types'
 
-const Blog = ({ blog, user }) => {
-  const [visible, setVisible] = useState(false);
-  const dispatch = useDispatch()
+const Blog = ({ blog, like, canRemove, remove }) => {
+  const [visible, setVisible] = useState(false)
 
-  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
-
-  const handleLike = (blog) => {
-    const newBlog = {...blog, user: blog.user.id}
-    dispatch(addLikeThunk(newBlog))
+  const style = {
+    marginBottom: 2,
+    padding: 5,
+    borderStyle: 'solid'
   }
 
-  const handleRemove = (blog) => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      dispatch(deleteBlog(blog))
-    }
-  }
-  
   return (
-    <>
-      {visible ? (
-        <div className="blog">
-          <div>
-            {blog.title} {blog.author}{" "}
-            <button onClick={toggleVisibility}>hide</button>
-          </div>
-          <div>
-            <a href={blog.url}>{blog.url}</a>
-          </div>
-          <div className="like-count">
-            likes {blog.likes}
-            <button className="like" onClick={() => handleLike(blog)}>
-              like
-            </button>
-          </div>
-          <div>{blog.user.name}</div>
-          {user.username === blog.user.username && (
-            <div>
-              <button onClick={() => handleRemove(blog)}>remove</button>
-            </div>
-          )}
+    <div style={style} className='blog'>
+      {blog.title} {blog.author}
+      <button onClick={() => setVisible(!visible)}>
+        {visible ? 'hide' : 'show'}
+      </button>
+      {visible&&
+        <div>
+          <div> <a href={blog.url}> {blog.url}</a> </div>
+          <div>likes {blog.likes} <button onClick={like}>like</button></div>
+          <div>{blog.user && blog.user.name}</div>
+          {canRemove&&<button onClick={remove}>delete</button>}
         </div>
-      ) : (
-        <div className="blog">
-          <div>
-            {blog.title} {blog.author}{" "}
-            <button onClick={toggleVisibility}>view</button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-};
+      }
+    </div>
+  )
+}
 
-export default Blog;
+Blog.propTypes = {
+  like: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
+  canRemove: PropTypes.bool,
+  blog: PropTypes.shape({
+    title: PropTypes.string,
+    author: PropTypes.string,
+    url: PropTypes.string,
+    likes: PropTypes.number
+  })
+}
+
+export default Blog
