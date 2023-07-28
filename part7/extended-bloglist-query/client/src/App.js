@@ -28,6 +28,26 @@ const App = () => {
     },
   });
 
+  const updateBlogMutation = useMutation(blogService.update, {
+    onSuccess: (updatedBlog) => {
+      const blogs = queryClient.getQueryData("blogs");
+      queryClient.setQueryData(
+        "blogs",
+        blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
+      );
+    },
+  });
+
+  const deleteBlogMutation = useMutation(blogService.remove, {
+    onSuccess: (_, deletedBlogId) => {
+      const blogs = queryClient.getQueriesData("blogs");
+      queryClient.setQueriesData(
+        "blogs",
+        blogs.filter((b) => b.id === deletedBlogId)
+      );
+    },
+  });
+
   const blogFormRef = useRef();
 
   useEffect(() => {
@@ -76,8 +96,9 @@ const App = () => {
   };
 
   const like = async (blog) => {
-    // const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id };
     // const updatedBlog = await blogService.update(blogToUpdate);
+    updateBlogMutation.mutate(blogToUpdate);
     notifyWith(`A like for the blog '${blog.title}' by '${blog.author}'`);
     // setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)));
   };
@@ -87,7 +108,8 @@ const App = () => {
       `Sure you want to remove '${blog.title}' by ${blog.author}`
     );
     if (ok) {
-      await blogService.remove(blog.id);
+      // await blogService.remove(blog.id);
+      deleteBlogMutation.mutate(blog.id);
       notifyWith(`The blog' ${blog.title}' by '${blog.author} removed`);
       // setBlogs(blogs.filter((b) => b.id !== blog.id));
     }

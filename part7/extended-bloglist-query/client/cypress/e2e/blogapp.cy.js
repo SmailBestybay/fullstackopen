@@ -113,8 +113,6 @@ describe("Blog app", function () {
       cy.get("@like2").click();
       cy.contains(blogs[2].title).contains("likes 1");
       cy.get("@like2").click();
-      cy.contains(blogs[2].title).contains("likes 1");
-      cy.get("@like2").click();
       cy.contains(blogs[2].title).contains("likes 2");
       cy.get("@like2").click();
       cy.contains(blogs[2].title).contains("likes 3");
