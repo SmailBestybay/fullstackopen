@@ -5,7 +5,7 @@ const notificationReducer = (state, action) => {
     case "SET":
       return { message: action.message, status: action.status };
     case "CLEAR":
-      return { message: "", status: "" };
+      return { message: null, status: "" };
   }
 };
 
