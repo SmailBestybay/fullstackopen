@@ -10,7 +10,7 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 
 import { useNotificationDispatch } from "./NotificationContext";
-import { useQuery } from "react-query";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 
 const App = () => {
   // const [blogs, setBlogs] = useState([]);
@@ -19,6 +19,14 @@ const App = () => {
 
   const notificationDispatch = useNotificationDispatch();
   const blogsQuery = useQuery("blogs", blogService.getAll);
+
+  const queryClient = useQueryClient();
+  const newBlogMutation = useMutation(blogService.create, {
+    onSuccess: (newBlog) => {
+      const blogs = queryClient.getQueryData("blogs");
+      queryClient.setQueryData("blogs", blogs.concat(newBlog));
+    },
+  });
 
   const blogFormRef = useRef();
 
@@ -61,6 +69,7 @@ const App = () => {
 
   const createBlog = async (newBlog) => {
     // const createdBlog = await blogService.create(newBlog);
+    newBlogMutation.mutate(newBlog);
     notifyWith(`A new blog '${newBlog.title}' by '${newBlog.author}' added`);
     // setBlogs(blogs.concat(createdBlog));
     blogFormRef.current.toggleVisibility();
