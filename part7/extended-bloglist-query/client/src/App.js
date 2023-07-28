@@ -10,25 +10,33 @@ import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 
 import { useNotificationDispatch } from "./NotificationContext";
+import { useQuery } from "react-query";
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  // const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState("");
   // const [info, setInfo] = useState({ message: null });
 
   const notificationDispatch = useNotificationDispatch();
+  const queryResult = useQuery("blogs", blogService.getAll);
 
+  
   const blogFormRef = useRef();
-
+  
   useEffect(() => {
     const user = storageService.loadUser();
     setUser(user);
   }, []);
-
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
-
+  // useEffect(() => {
+    //   blogService.getAll().then((blogs) => setBlogs(blogs));
+    // }, []);
+    
+    
+    if (queryResult.isLoading) {
+      return <div>loading...</div>;
+    }
+    const blogs = queryResult.data;
+    
   const notifyWith = (message, status = "info") => {
     notificationDispatch({
       type: "SET",
@@ -37,7 +45,7 @@ const App = () => {
     });
 
     setTimeout(() => {
-      notificationDispatch({ type: "CLEAR"});
+      notificationDispatch({ type: "CLEAR" });
     }, 3000);
   };
 
@@ -59,17 +67,17 @@ const App = () => {
   };
 
   const createBlog = async (newBlog) => {
-    const createdBlog = await blogService.create(newBlog);
+    // const createdBlog = await blogService.create(newBlog);
     notifyWith(`A new blog '${newBlog.title}' by '${newBlog.author}' added`);
-    setBlogs(blogs.concat(createdBlog));
+    // setBlogs(blogs.concat(createdBlog));
     blogFormRef.current.toggleVisibility();
   };
 
   const like = async (blog) => {
-    const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id };
-    const updatedBlog = await blogService.update(blogToUpdate);
+    // const blogToUpdate = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    // const updatedBlog = await blogService.update(blogToUpdate);
     notifyWith(`A like for the blog '${blog.title}' by '${blog.author}'`);
-    setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)));
+    // setBlogs(blogs.map((b) => (b.id === blog.id ? updatedBlog : b)));
   };
 
   const remove = async (blog) => {
@@ -79,7 +87,7 @@ const App = () => {
     if (ok) {
       await blogService.remove(blog.id);
       notifyWith(`The blog' ${blog.title}' by '${blog.author} removed`);
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
+      // setBlogs(blogs.filter((b) => b.id !== blog.id));
     }
   };
 
