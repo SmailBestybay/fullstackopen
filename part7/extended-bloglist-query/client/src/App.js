@@ -9,7 +9,7 @@ import NewBlog from "./components/NewBlog";
 import Notification from "./components/Notification";
 import Togglable from "./components/Togglable";
 
-import { useNotificationDispatch } from "./NotificationContext";
+import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
 const App = () => {
