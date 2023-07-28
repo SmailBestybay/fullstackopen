@@ -18,25 +18,18 @@ const App = () => {
   // const [info, setInfo] = useState({ message: null });
 
   const notificationDispatch = useNotificationDispatch();
-  const queryResult = useQuery("blogs", blogService.getAll);
+  const blogsQuery = useQuery("blogs", blogService.getAll);
 
-  
   const blogFormRef = useRef();
-  
+
   useEffect(() => {
     const user = storageService.loadUser();
     setUser(user);
   }, []);
   // useEffect(() => {
-    //   blogService.getAll().then((blogs) => setBlogs(blogs));
-    // }, []);
-    
-    
-    if (queryResult.isLoading) {
-      return <div>loading...</div>;
-    }
-    const blogs = queryResult.data;
-    
+  //   blogService.getAll().then((blogs) => setBlogs(blogs));
+  // }, []);
+
   const notifyWith = (message, status = "info") => {
     notificationDispatch({
       type: "SET",
@@ -114,17 +107,21 @@ const App = () => {
       <Togglable buttonLabel="new note" ref={blogFormRef}>
         <NewBlog createBlog={createBlog} />
       </Togglable>
-      <div>
-        {blogs.sort(byLikes).map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            like={() => like(blog)}
-            canRemove={user && blog.user.username === user.username}
-            remove={() => remove(blog)}
-          />
-        ))}
-      </div>
+      {blogsQuery.isLoading ? (
+        <div>loading blogs...</div>
+      ) : (
+        <div>
+          {blogsQuery.data.sort(byLikes).map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              like={() => like(blog)}
+              canRemove={user && blog.user.username === user.username}
+              remove={() => remove(blog)}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
