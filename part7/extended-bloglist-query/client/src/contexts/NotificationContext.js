@@ -6,6 +6,8 @@ const notificationReducer = (state, action) => {
       return { message: action.message, status: action.status };
     case "CLEAR":
       return { message: null, status: "" };
+    default:
+      return state;
   }
 };
 
