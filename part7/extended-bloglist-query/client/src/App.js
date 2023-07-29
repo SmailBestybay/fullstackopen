@@ -5,11 +5,12 @@ import LoginForm from "./components/Login";
 import Notification from "./components/Notification";
 
 import Home from "./views/Home";
+import Users from "./views/Users";
 
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useUserValue, useUserDispatch } from "./contexts/UserContext";
 
-// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const App = () => {
   const notificationDispatch = useNotificationDispatch();
@@ -57,15 +58,19 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <h2>blogs</h2>
       <Notification />
       <div>
         {user.name} logged in
+        <br/>
         <button onClick={logout}>logout</button>
       </div>
-      <Home notifyWith={notifyWith} />
-    </div>
+      <Routes>
+        <Route path="/" element={<Home notifyWith={notifyWith} />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </Router>
   );
 };
 
