@@ -1,16 +1,20 @@
 import loginService from "./services/login";
 import storageService from "./services/storage";
+import userService from "./services/user";
 
 import LoginForm from "./components/Login";
 import Notification from "./components/Notification";
 
 import Home from "./views/Home";
 import Users from "./views/Users";
+import User from "./views/User";
 
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useUserValue, useUserDispatch } from "./contexts/UserContext";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route, useMatch } from "react-router-dom";
+
+import { useQuery } from "react-query";
 
 const App = () => {
   const notificationDispatch = useNotificationDispatch();
@@ -47,6 +51,13 @@ const App = () => {
     notifyWith("logged out");
   };
 
+  const usersQuery = useQuery("users", userService.getAll);
+  const match = useMatch("/users/:id");
+  const matchedUser =
+    match && usersQuery.isSuccess
+      ? usersQuery.data.find((user) => user.id === match.params.id)
+      : null;
+
   if (!user) {
     return (
       <div>
@@ -58,19 +69,20 @@ const App = () => {
   }
 
   return (
-    <Router>
+    <div>
       <h2>blogs</h2>
       <Notification />
       <div>
         {user.name} logged in
-        <br/>
+        <br />
         <button onClick={logout}>logout</button>
       </div>
       <Routes>
         <Route path="/" element={<Home notifyWith={notifyWith} />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User user={matchedUser} />} />
       </Routes>
-    </Router>
+    </div>
   );
 };
 

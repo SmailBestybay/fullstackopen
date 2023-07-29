@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import userService from "../services/user";
+import { Link } from "react-router-dom";
 
 const Users = () => {
   const usersQuery = useQuery("users", userService.getAll);
@@ -21,7 +22,9 @@ const Users = () => {
         <tbody>
           {usersQuery.data.map((user) => (
             <tr key={user.id}>
-              <td>{user.name}</td>
+              <td>
+                <Link to={`/users/${user.id}`}>{user.name}</Link>
+              </td>
               <td>{user.blogs.length}</td>
             </tr>
           ))}
