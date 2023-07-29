@@ -7,12 +7,7 @@ import { useRef } from "react";
 
 const Blogs = ({
   user,
-  hanldeLogout,
-  // blogs,
-  // notify,
-  // handleLike,
-  // handleRemove,
-  // createBlog,
+  handleLogout,
 }) => {
   const togglableRef = useRef();
 
@@ -24,14 +19,13 @@ const Blogs = ({
       <Notification />
       <div>
         {user.name} logged in
-        <button onClick={hanldeLogout}>logout</button>
+        <button onClick={handleLogout}>logout</button>
       </div>
 
       <Togglable buttonLabel="new blog" ref={togglableRef}>
         <h2>create new</h2>
         <BlogForm
           togglableRef={togglableRef}
-          // createBlog={createBlog}
         />
       </Togglable>
 
@@ -42,8 +36,6 @@ const Blogs = ({
             key={blog.id}
             blog={blog}
             user={user}
-            // handleLike={handleLike}
-            // handleRemove={handleRemove}
           />
         ))}
     </div>
