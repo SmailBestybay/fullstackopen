@@ -11,43 +11,23 @@ import Togglable from "./components/Togglable";
 
 import { useNotificationDispatch } from "./contexts/NotificationContext";
 import { useUserValue, useUserDispatch } from "./contexts/UserContext";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
+import {
+  useNewBlogMutation,
+  useUpdateBlogMutation,
+  useDeleteBlogMutation,
+} from "./mutations/blogMutations";
 
 const App = () => {
-
   const notificationDispatch = useNotificationDispatch();
   const blogsQuery = useQuery("blogs", blogService.getAll);
 
   const userDispatch = useUserDispatch();
   const user = useUserValue();
 
-  const queryClient = useQueryClient();
-  const newBlogMutation = useMutation(blogService.create, {
-    onSuccess: (newBlog) => {
-      const blogs = queryClient.getQueryData("blogs");
-      queryClient.setQueryData("blogs", blogs.concat(newBlog));
-    },
-  });
-
-  const updateBlogMutation = useMutation(blogService.update, {
-    onSuccess: (updatedBlog) => {
-      const blogs = queryClient.getQueryData("blogs");
-      queryClient.setQueryData(
-        "blogs",
-        blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b))
-      );
-    },
-  });
-
-  const deleteBlogMutation = useMutation(blogService.remove, {
-    onSuccess: (_, deletedBlogId) => {
-      const blogs = queryClient.getQueriesData("blogs");
-      queryClient.setQueriesData(
-        "blogs",
-        blogs.filter((b) => b.id === deletedBlogId)
-      );
-    },
-  });
+  const newBlogMutation = useNewBlogMutation();
+  const updateBlogMutation = useUpdateBlogMutation();
+  const deleteBlogMutation = useDeleteBlogMutation();
 
   const blogFormRef = useRef();
 
