@@ -6,6 +6,8 @@ import Togglable from "../components/Togglable";
 import NewBlog from "../components/NewBlog";
 import Blog from "../components/Blog";
 
+import { useNotify } from "../contexts/NotificationContext";
+
 import {
   useNewBlogMutation,
   useUpdateBlogMutation,
@@ -14,7 +16,7 @@ import {
 
 import { useUserValue } from "../contexts/UserContext";
 
-const Home = ({ notifyWith }) => {
+const Home = () => {
   const blogsQuery = useQuery("blogs", blogService.getAll);
 
   const user = useUserValue();
@@ -24,6 +26,8 @@ const Home = ({ notifyWith }) => {
   const deleteBlogMutation = useDeleteBlogMutation();
 
   const blogFormRef = useRef();
+
+  const notifyWith = useNotify();
 
   const createBlog = async (newBlog) => {
     newBlogMutation.mutate(newBlog);

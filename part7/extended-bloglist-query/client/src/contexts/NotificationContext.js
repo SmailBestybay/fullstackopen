@@ -19,8 +19,22 @@ export const NotificationContextProvider = (props) => {
     status: "",
   });
 
+  const notifyWith = (message, status = "info") => {
+    notificationDispatch({
+      type: "SET",
+      message,
+      status,
+    });
+
+    setTimeout(() => {
+      notificationDispatch({ type: "CLEAR" });
+    }, 3000);
+  };
+
   return (
-    <NotificationContext.Provider value={[notification, notificationDispatch]}>
+    <NotificationContext.Provider
+      value={[notification, notificationDispatch, notifyWith]}
+    >
       {props.children}
     </NotificationContext.Provider>
   );
@@ -34,6 +48,11 @@ export const useNotificationValue = () => {
 export const useNotificationDispatch = () => {
   const notificationAndDispatch = useContext(NotificationContext);
   return notificationAndDispatch[1];
+};
+
+export const useNotify = () => {
+  const context = useContext(NotificationContext);
+  return context[2];
 };
 
 export default NotificationContext;

@@ -32,10 +32,16 @@ const getAll = async () => {
   return response.data;
 };
 
+const fetchUser = async (id) => {
+  const response = await axios.get(`${baseUrl}/${id}`);
+  return response.data;
+};
+
 export default {
   setUser,
   getUser,
   clearUser,
   getToken,
   getAll,
+  fetchUser,
 };
