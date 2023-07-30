@@ -1,4 +1,3 @@
-// import loginService from "./services/login";
 import storageService from "./services/storage";
 
 import LoginForm from "./components/Login";
@@ -12,7 +11,7 @@ import Blog from "./views/Blog";
 import { useNotify } from "./contexts/NotificationContext";
 import { useUserValue, useUserDispatch } from "./contexts/UserContext";
 
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Link } from "react-router-dom";
 
 import blogService from "./services/blogs";
 import { useQuery } from "react-query";
@@ -45,9 +44,10 @@ const App = () => {
     <div>
       <h2>blogs</h2>
       <Notification />
-      <div>
+      <div style={{background: "#d3d3d3", display: "flex", gap: '5px', padding: '5px'}}>
+        <span><Link to='/'>blogs</Link></span>
+        <span><Link to='/users'>users</Link></span>
         {user.name} logged in
-        <br />
         <button onClick={logout}>logout</button>
       </div>
       <Routes>
